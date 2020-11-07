@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../mix_ins/validator_mixin.dart';
+import './signup.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -14,15 +15,15 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text('Delete this bar'),
-        //   backgroundColor: Colors.amber,
-        // ),
-        resizeToAvoidBottomInset:
-            false, // prevent shrinking image when keyboard opens
-        body: Stack(
+    return Scaffold(
+      // appBar: AppBar(
+      //   title: Text('Delete this bar'),
+      //   backgroundColor: Colors.amber,
+      // ),
+      resizeToAvoidBottomInset:
+          false, // prevent shrinking image when keyboard opens
+      body: Builder(builder: (context) {
+        return Stack(
           children: [
             Positioned.fill(
               child: Image.asset(
@@ -56,72 +57,42 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
               child: Form(
                 key: formKey,
                 child: Column(
-                  children: [
-                    buttonBar(),
-                    // name('First Name'),
-                    // name('Last Name'),
-                    // email(),
-                    mobileNumber(),
-                    button()
-                  ],
+                  children: [buttonBar(context), mobileNumber(), button()],
                 ),
               ),
             ),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
-  Widget name(String value) {
-    return TextFormField(
-      keyboardType: TextInputType.name, // optimize keyboard for name
-      decoration: InputDecoration(
-          icon: Image(
-            image: AssetImage(value == 'First Name' ? 'images/icons/firstname.png' : 'images/icons/lastname.png'),
-          ),
-          labelText: value,
-          hintText: value == 'First Name' ? 'John' : 'Doe',
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.black, fontSize: 25)),
-    );
-  }
-
-  Widget buttonBar(){
+  Widget buttonBar(BuildContext context) {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       buttonPadding: EdgeInsets.only(left: 30, right: 30),
       children: [
         RaisedButton(
-          color: Colors.pink,
-          
-          onPressed: (){},
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Colors.pink, width: 1.5)
+          ),
+          onPressed: () {
+            // Navigator.pop(context);
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => SignUp()));
+          },
           child: Text('Sign Up'),
         ),
         RaisedButton(
-          onPressed: (){},
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)
+          ),
+          color: Colors.pink,
+          onPressed: () {},
           child: Text('Sign In'),
         )
       ],
-    );
-  }
-
-  Widget email() {
-    return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      decoration: InputDecoration(
-          icon: Image(
-            image: AssetImage('images/icons/email.png'),
-          ),
-          labelText: 'E MAIL',
-          hintText: 'example@email.com',
-          labelStyle: TextStyle(
-              fontWeight: FontWeight.w500, color: Colors.black, fontSize: 25)),
-      validator: emailValidation,
-      onSaved: (String value) {
-        // invoke onSaved when formKey.currentState.Saved() calls
-        print(value);
-      },
     );
   }
 
@@ -147,7 +118,7 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
       child: Text(
         'SIGN IN',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-        ),
+      ),
       onPressed: () {
         if (formKey.currentState.validate()) {
           formKey.currentState

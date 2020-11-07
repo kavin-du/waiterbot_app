@@ -4,14 +4,7 @@ import 'package:flutter/material.dart';
 import '../mix_ins/validator_mixin.dart';
 import './signin.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      
-    );
-  }
-}
+import './licence_agreement.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -22,6 +15,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
   final formKey = GlobalKey<
       FormState>(); // we are not passing Form, FormState passing because it is stful widget
 
+  bool checkBoxValue = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,63 +26,69 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
         // ),
         resizeToAvoidBottomInset:
             false, // prevent shrinking image when keyboard opens
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'images/sign_background.jpg',
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-            // BackdropFilter(
-            //   filter: ImageFilter.blur(
-            //     sigmaX: 5,
-            //     sigmaY: 5,
-            //   ),
-            //   child: Container(
-            //   // color: Colors.white,
-            //   margin: EdgeInsets.all(25),
-            //   decoration: BoxDecoration(
-            //     color: Colors.black.withOpacity(0),
-            //     borderRadius: BorderRadius.all(Radius.circular(30))
-            //   ),
-            // ),
-            // ),
-            Container(
-              // color: Colors.white,
-              margin: EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(45))),
-            ),
-            Container(
-              margin: EdgeInsets.all(25),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    buttonBar(),
-                    name('First Name'),
-                    name('Last Name'),
-                    email(),
-                    mobileNumber(),
-                    button()
-                  ],
+        body: Builder(builder: (context) {
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  'images/sign_background.jpg',
+                  fit: BoxFit.fitHeight,
                 ),
               ),
-            ),
-          ],
-        ),
+              // BackdropFilter(
+              //   filter: ImageFilter.blur(
+              //     sigmaX: 5,
+              //     sigmaY: 5,
+              //   ),
+              //   child: Container(
+              //   // color: Colors.white,
+              //   margin: EdgeInsets.all(25),
+              //   decoration: BoxDecoration(
+              //     color: Colors.black.withOpacity(0),
+              //     borderRadius: BorderRadius.all(Radius.circular(30))
+              //   ),
+              // ),
+              // ),
+              Container(
+                // color: Colors.white,
+                margin: EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(45))),
+              ),
+              Container(
+                margin: EdgeInsets.all(25),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      buttonBar(context),
+                      name('First Name'),
+                      name('Last Name'),
+                      email(),
+                      mobileNumber(),
+                      checkbox(this),
+                      Licence(),
+                      button()
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }
-
+  
   Widget name(String value) {
     return TextFormField(
       keyboardType: TextInputType.name, // optimize keyboard for name
       decoration: InputDecoration(
           icon: Image(
-            image: AssetImage(value == 'First Name' ? 'images/icons/firstname.png' : 'images/icons/lastname.png'),
+            image: AssetImage(value == 'First Name'
+                ? 'images/icons/firstname.png'
+                : 'images/icons/lastname.png'),
           ),
           labelText: value,
           hintText: value == 'First Name' ? 'John' : 'Doe',
@@ -97,22 +97,27 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
-  Widget buttonBar(){
-    return ButtonBar(
+  Widget buttonBar(BuildContext context) {
+    return ButtonBar(      
       alignment: MainAxisAlignment.center,
       buttonPadding: EdgeInsets.only(left: 30, right: 30),
       children: [
-        RaisedButton(
-          color: Colors.pink,          
-          onPressed: (){},
+        RaisedButton(          
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          color: Colors.pink,
+          onPressed: () {},
           child: Text('Sign Up'),
         ),
         RaisedButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Colors.pink, width: 1.5)
+          ),
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SignIn())
-            );
+                context, MaterialPageRoute(builder: (context) => SignIn()));
           },
           child: Text('Sign In'),
         )
@@ -154,6 +159,20 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
+  Widget checkbox(_SignUpState parent){
+    return CheckboxListTile(
+      controlAffinity: ListTileControlAffinity.leading,
+      title: Text('Agree to terms and conditions'),
+      value: parent.checkBoxValue, 
+      onChanged: (bool value) {
+        parent.setState((){
+          parent.checkBoxValue = value;
+        });
+        print(parent.checkBoxValue);
+      }
+    );
+  }
+
   Widget button() {
     return RaisedButton(
       elevation: 10,
@@ -161,7 +180,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
       child: Text(
         'SIGN UP',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
-        ),
+      ),
       onPressed: () {
         if (formKey.currentState.validate()) {
           formKey.currentState
