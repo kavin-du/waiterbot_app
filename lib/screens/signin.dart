@@ -16,10 +16,6 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Delete this bar'),
-      //   backgroundColor: Colors.amber,
-      // ),
       resizeToAvoidBottomInset:
           false, // prevent shrinking image when keyboard opens
       body: Builder(builder: (context) {
@@ -57,7 +53,14 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
               child: Form(
                 key: formKey,
                 child: Column(
-                  children: [buttonBar(context), mobileNumber(), button()],
+                  children: [
+                    buttonBar(context), 
+                    mobileNumber(), 
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                    ),
+                    button()
+                  ],
                 ),
               ),
             ),

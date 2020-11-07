@@ -24,8 +24,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
         //   title: Text('Delete this bar'),
         //   backgroundColor: Colors.amber,
         // ),
-        resizeToAvoidBottomInset:
-            false, // prevent shrinking image when keyboard opens
+        resizeToAvoidBottomInset: false, // prevent shrinking image when keyboard opens
         body: Builder(builder: (context) {
           return Stack(
             children: [
@@ -68,7 +67,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
                       email(),
                       mobileNumber(),
                       checkbox(this),
-                      Licence(),
+                      // Licence(),
                       button()
                     ],
                   ),
@@ -80,7 +79,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
       ),
     );
   }
-  
+
   Widget name(String value) {
     return TextFormField(
       keyboardType: TextInputType.name, // optimize keyboard for name
@@ -98,11 +97,11 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
   }
 
   Widget buttonBar(BuildContext context) {
-    return ButtonBar(      
+    return ButtonBar(
       alignment: MainAxisAlignment.center,
       buttonPadding: EdgeInsets.only(left: 30, right: 30),
       children: [
-        RaisedButton(          
+        RaisedButton(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -112,9 +111,8 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
         ),
         RaisedButton(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Colors.pink, width: 1.5)
-          ),
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: Colors.pink, width: 1.5)),
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => SignIn()));
@@ -159,17 +157,20 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
-  Widget checkbox(_SignUpState parent){
-    return CheckboxListTile(
-      controlAffinity: ListTileControlAffinity.leading,
-      title: Text('Agree to terms and conditions'),
-      value: parent.checkBoxValue, 
-      onChanged: (bool value) {
-        parent.setState((){
-          parent.checkBoxValue = value;
-        });
-        print(parent.checkBoxValue);
-      }
+  Widget checkbox(_SignUpState parent) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Checkbox(
+            value: parent.checkBoxValue,
+            onChanged: (bool value) {
+              parent.setState(() {
+                parent.checkBoxValue = value;
+              });
+              // print(parent.checkBoxValue);
+            }),
+        Licence(),
+      ],
     );
   }
 
@@ -182,7 +183,8 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        if (formKey.currentState.validate()) {
+        if (formKey.currentState.validate() && this.checkBoxValue) {
+          print("user validated");
           formKey.currentState
               .save(); // this will call all onSaved() functions in form
         }
