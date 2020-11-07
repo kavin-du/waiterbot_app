@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import '../mix_ins/validator_mixin.dart';
 import './signin.dart';
 
@@ -24,50 +25,43 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
         //   title: Text('Delete this bar'),
         //   backgroundColor: Colors.amber,
         // ),
-        resizeToAvoidBottomInset: false, // prevent shrinking image when keyboard opens
+       resizeToAvoidBottomInset: false, // prevent shrinking image when keyboard opens
         body: Builder(builder: (context) {
           return Stack(
-            children: [
+            children: [    
               Positioned.fill(
                 child: Image.asset(
                   'images/sign_background.jpg',
                   fit: BoxFit.fitHeight,
                 ),
+              ), 
+
+              Container(                  
+                  margin: EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.6),
+                    borderRadius: BorderRadius.all(Radius.circular(65))
+                  ),
               ),
-              // BackdropFilter(
-              //   filter: ImageFilter.blur(
-              //     sigmaX: 5,
-              //     sigmaY: 5,
-              //   ),
-              //   child: Container(
-              //   // color: Colors.white,
-              //   margin: EdgeInsets.all(25),
-              //   decoration: BoxDecoration(
-              //     color: Colors.black.withOpacity(0),
-              //     borderRadius: BorderRadius.all(Radius.circular(30))
-              //   ),
-              // ),
-              // ),
-              Container(
-                // color: Colors.white,
-                margin: EdgeInsets.all(25),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(45))),
-              ),
-              Container(
-                margin: EdgeInsets.all(25),
+              Container(                            
+                margin: EdgeInsets.only(left: 45, right: 45, top: 35), // 45
                 child: Form(
                   key: formKey,
-                  child: Column(
-                    children: [
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [                      
+                      Image.asset(
+                        'images/waiterbot_logo.png',
+                        width: 120,
+                      ),
                       buttonBar(context),
                       name('First Name'),
                       name('Last Name'),
                       email(),
                       mobileNumber(),
+                      Padding(padding: EdgeInsets.all(5)),
                       checkbox(this),
-                      // Licence(),
+                      Padding(padding: EdgeInsets.only(top: 30)),
                       button()
                     ],
                   ),
@@ -82,6 +76,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
 
   Widget name(String value) {
     return TextFormField(
+      validator: nameValidation,
       keyboardType: TextInputType.name, // optimize keyboard for name
       decoration: InputDecoration(
           icon: Image(

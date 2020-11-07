@@ -27,33 +27,25 @@ class _SignInState extends State<SignIn> with ValidatorMixin {
                 fit: BoxFit.fitHeight,
               ),
             ),
-            // BackdropFilter(
-            //   filter: ImageFilter.blur(
-            //     sigmaX: 5,
-            //     sigmaY: 5,
-            //   ),
-            //   child: Container(
-            //   // color: Colors.white,
-            //   margin: EdgeInsets.all(25),
-            //   decoration: BoxDecoration(
-            //     color: Colors.black.withOpacity(0),
-            //     borderRadius: BorderRadius.all(Radius.circular(30))
-            //   ),
-            // ),
-            // ),
-            Container(
-              // color: Colors.white,
-              margin: EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(45))),
+
+            Container(                  
+                  margin: EdgeInsets.all(25),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.6),
+                    borderRadius: BorderRadius.all(Radius.circular(65))
+                  ),
             ),
+
             Container(
-              margin: EdgeInsets.all(25),
+              margin: EdgeInsets.only(left: 45, right: 45, top: 35),
               child: Form(
                 key: formKey,
                 child: Column(
                   children: [
+                    Image.asset(
+                        'images/waiterbot_logo.png',
+                        width: 120,
+                      ),
                     buttonBar(context), 
                     mobileNumber(), 
                     Padding(

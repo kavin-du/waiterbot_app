@@ -12,6 +12,11 @@ class ValidatorMixin {
     return null;
   }
 
+  String nameValidation (String value) {
+    if(value.length == 0) return 'Name cannot be empty';
+    return null;
+  }
+
   String phoneValidation(String value) {
     if(value.length == 10 && value.startsWith('0') && !value.contains(RegExp(r'[^0-9]'))){
       return null;

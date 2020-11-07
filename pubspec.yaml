@@ -47,6 +47,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/sign_background.jpg
+    - images/waiterbot_logo.png
     - images/icons/firstname.png
     - images/icons/lastname.png
     - images/icons/email.png
