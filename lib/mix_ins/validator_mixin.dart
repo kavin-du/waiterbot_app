@@ -24,4 +24,9 @@ class ValidatorMixin {
     return 'Enter a valid mobile number';
   }
 
+  String otpValidator(String value) {
+    if(value != '1234') return 'Try Again!';
+    return null;
+  }
+
 }
