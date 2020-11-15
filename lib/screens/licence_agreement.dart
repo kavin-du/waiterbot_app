@@ -9,7 +9,7 @@ class Licence extends StatelessWidget {
         style: TextStyle(
             color: Colors.blue,
             decoration: TextDecoration.underline,
-            fontSize: 17),
+            fontSize: 15),
         text: 'Agree to Terms & Conditions',
         recognizer: TapGestureRecognizer()
           ..onTap = () => showAlertDialog(context),

@@ -9,10 +9,10 @@ import './screens/qrscan.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
-  runApp(new SignScreen());
-  // runApp(new MaterialApp(
-  //   // home: OTP(),
-  //   // home: ImageSlides(),
-  //   home: QRScan(),
-  // ));
+  // runApp(new SignScreen());
+  runApp(new MaterialApp(
+    // home: OTP(),
+    // home: ImageSlides(),
+    home: SignScreen()
+  ));
 }
