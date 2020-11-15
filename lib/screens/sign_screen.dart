@@ -1,33 +1,24 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import '../mix_ins/validator_mixin.dart';
-import './signin.dart';
+import 'package:provider/provider.dart';
 
-import './licence_agreement.dart';
+import 'package:waiterbot_app/mix_ins/validator_mixin.dart';
+import '../providers/sign_state_provider.dart';
+import 'licence_agreement.dart';
 
-class SignUp extends StatefulWidget {
-  @override
-  _SignUpState createState() => _SignUpState();
-}
+class SignScreen extends StatelessWidget with ValidatorMixin {
+  final _formKeySignUp = GlobalKey<FormState>();
+  final _formKeySignIn = GlobalKey<FormState>();
 
-class _SignUpState extends State<SignUp> with ValidatorMixin {
-  final formKey = GlobalKey<
-      FormState>(); // we are not passing Form, FormState passing because it is stful widget
-
-  bool checkBoxValue = false;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        // appBar: AppBar(
-        //   title: Text('Delete this bar'),
-        //   backgroundColor: Colors.amber,
-        // ),
-       resizeToAvoidBottomInset: false, // prevent shrinking image when keyboard opens
-        body: Builder(builder: (context) {
-          return Stack(
+    return ChangeNotifierProvider<SignStateProvider>(
+      create: (context) =>SignStateProvider(),
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            home: Scaffold(
+              resizeToAvoidBottomInset: false, // prevent shrinking home screen image
+              body: Stack(
             children: [    
               Positioned.fill(
                 child: Image.asset(
@@ -46,32 +37,57 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
               Container(                            
                 margin: EdgeInsets.only(left: 45, right: 45, top: 35), // 45
                 child: Form(
-                  key: formKey,
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [                      
-                      Image.asset(
-                        'images/waiterbot_logo.png',
-                        width: 120,
-                      ),
-                      buttonBar(context),
-                      name('First Name'),
-                      name('Last Name'),
-                      email(),
-                      mobileNumber(),
-                      Padding(padding: EdgeInsets.all(5)),
-                      checkbox(this),
-                      Padding(padding: EdgeInsets.only(top: 30)),
-                      button()
-                    ],
-                  ),
+                  key: _formKeySignUp,
+                  child: Consumer<SignStateProvider>(
+                    builder: (context, provider, child){
+                      return setContent(provider);
+                    },
+                  ), 
                 ),
               ),
             ],
+          ),
+            ),
           );
-        }),
+        },
       ),
+
     );
+  }
+
+  Widget setContent(SignStateProvider provider){
+    if(provider.isSignUp){
+      return Wrap(
+        alignment: WrapAlignment.center,
+        children: [                      
+          Image.asset(
+            'images/waiterbot_logo.png',
+            width: 120,
+          ),
+          buttonBar(provider),
+          name('First Name'),
+          name('Last Name'),
+          email(),
+          mobileNumber(),
+          Padding(padding: EdgeInsets.all(5)),
+          checkbox(provider),
+          Padding(padding: EdgeInsets.only(top: 30)),
+          button(provider)
+        ],);
+    }
+    return Wrap(
+        alignment: WrapAlignment.center,
+        children: [                      
+          Image.asset(
+            'images/waiterbot_logo.png',
+            width: 120,
+          ),
+          buttonBar(provider),
+          mobileNumber(),
+          Padding(padding: EdgeInsets.only(bottom: 85)),
+          button(provider)
+        ],);
+      
   }
 
   Widget name(String value) {
@@ -91,7 +107,7 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
-  Widget buttonBar(BuildContext context) {
+  Widget buttonBar(SignStateProvider provider) {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       buttonPadding: EdgeInsets.only(left: 30, right: 30),
@@ -101,16 +117,17 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
             borderRadius: BorderRadius.circular(20),
           ),
           color: Colors.pink,
-          onPressed: () {},
-          child: Text('Sign Up'),
+          onPressed: () {
+            provider.signUpScreen();
+          },
+          child: Text('Sign Up'), 
         ),
         RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(color: Colors.pink, width: 1.5)),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => SignIn()));
+            provider.signInScreen();
           },
           child: Text('Sign In'),
         )
@@ -152,16 +169,14 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
-  Widget checkbox(_SignUpState parent) {
+  Widget checkbox(SignStateProvider provider) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Checkbox(
-            value: parent.checkBoxValue,
+            value: provider.checkBoxValue, // ?
             onChanged: (bool value) {
-              parent.setState(() {
-                parent.checkBoxValue = value;
-              });
+              provider.setCheckBox(value);
               // print(parent.checkBoxValue);
             }),
         Licence(),
@@ -169,23 +184,30 @@ class _SignUpState extends State<SignUp> with ValidatorMixin {
     );
   }
 
-  Widget button() {
+  Widget button(SignStateProvider provider) {
     return RaisedButton(
       
       elevation: 10,
       padding: EdgeInsets.fromLTRB(45, 10, 45, 10),
       child: Text(
-        'SIGN UP',
+        provider.isSignUp ? 'SIGN UP' : 'SIGN IN',
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        if (formKey.currentState.validate() && this.checkBoxValue) {
-          print("user validated");
-          formKey.currentState
-              .save(); // this will call all onSaved() functions in form
+        if(provider.isSignUp) {
+          if (_formKeySignUp.currentState.validate() && provider.checkBoxValue) {
+            print("user validated, register");
+            _formKeySignUp.currentState.save(); // this will call all onSaved() functions in form
+          }
+        } else {
+          if (_formKeySignUp.currentState.validate()) {
+            print("user validated, log in");
+            _formKeySignUp.currentState.save(); // this will call all onSaved() functions in form
+          }
         }
       },
       color: Colors.amberAccent,
     );
   }
+
 }

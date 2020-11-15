@@ -31,7 +31,9 @@ dependencies:
   pin_code_fields: ^6.0.0
   carousel_slider: ^2.3.1
   qrscan: ^0.2.17
+  provider: ^4.3.2+2
   encrypt: ^4.1.0
+
 
 dev_dependencies:
   flutter_test:
