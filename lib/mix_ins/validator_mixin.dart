@@ -8,7 +8,7 @@ class ValidatorMixin {
 
   String passwordValidation (String value) {
     // current value of the formfield
-    if(value.length < 4) return 'Password must be at least 4 charactors';
+    if(value.length < 8) return 'Password must be at least 8 charactors, with uppercase, lowercase, special, alphanumeric';
     return null;
   }
 
@@ -18,7 +18,7 @@ class ValidatorMixin {
   }
 
   String phoneValidation(String value) {
-    if(value.length == 10 && value.startsWith('0') && !value.contains(RegExp(r'[^0-9]'))){
+    if(value.length == 10 && value.startsWith('07') && !value.contains(RegExp(r'[^0-9]'))){
       return null;
     }
     return 'Enter a valid mobile number';

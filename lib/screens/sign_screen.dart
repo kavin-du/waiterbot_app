@@ -1,8 +1,11 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:waiterbot_app/mix_ins/validator_mixin.dart';
+import 'package:waiterbot_app/models/user_model.dart';
+import 'package:waiterbot_app/providers/auth_provider.dart';
 import '../providers/sign_state_provider.dart';
 import 'licence_agreement.dart';
 
@@ -10,89 +13,43 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
   final _formKeySignUp = GlobalKey<FormState>();
   final _formKeySignIn = GlobalKey<FormState>();
 
+  String _mobileNumber, _password;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height; 
     final width = MediaQuery.of(context).size.width; 
-    return ChangeNotifierProvider<SignStateProvider>(
-      create: (context) => SignStateProvider(),
-      child: Builder(
-        builder: (context) {
-          return Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('images/sign_background.jpg'),
-                      fit: BoxFit.fill)),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                // resizeToAvoidBottomInset: false, // prevent shrinking home screen image
-                body: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-                    padding: EdgeInsets.only(top: 20, bottom: 20),
-                    height: height-50,
-                    decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.6),
-                        borderRadius: BorderRadius.all(Radius.circular(65))),
-                    child: SingleChildScrollView(
-                      child: Container(                      
-                        // margin: EdgeInsets.only(left: 45, right: 45, top: 35), // 45
-                        child: Form(
-                          key: Provider.of<SignStateProvider>(context).isSignUp ? _formKeySignUp : _formKeySignIn,
-                          child: Consumer<SignStateProvider>(
-                            builder: (context, provider, child) {
-                              return setContent(provider);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-        },
-      ),
-    );
-  }
 
-  Widget setContent(SignStateProvider provider) {
-    if (provider.isSignUp) {
-      return Wrap(
-        alignment: WrapAlignment.center,
-        children: [
-          Image.asset(
-            'images/waiterbot_logo.png',
-            width: 100,
-          ),
-          buttonBar(provider),
-          name('First Name'),
-          name('Last Name'),
-          email(),
-          password(),
-          mobileNumber(),
-          Padding(padding: EdgeInsets.all(5)),
-          checkbox(provider),
-          Padding(padding: EdgeInsets.only(top: 30)),
-          button(provider)
-        ],
-      );
+    void doLogin(){
+      if(_formKeySignIn.currentState.validate()){
+        _formKeySignIn.currentState.save();
+
+        // check this....................listern false
+        final Future<Map<String, dynamic>> successfulMessage = Provider.of<AuthProvider>(context, listen: false)
+          .login(_mobileNumber, _password);
+
+        successfulMessage.then((response) {
+          if(response['status']){
+            User user = response['user'];
+
+            // Provider.of<UserProvider>(context, listen=false).setUser(user);
+            Navigator.pushReplacementNamed(context, '/success');
+          } else {
+            // print(response);
+            Flushbar(
+              title:'Login Failed',
+              message: response['message'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          }
+        });
+      } else {
+        print('invalid form');
+      }
+    
     }
-    return Wrap(
-      alignment: WrapAlignment.center,
-      children: [
-        Image.asset(
-          'images/waiterbot_logo.png',
-          width: 100,
-        ),
-        buttonBar(provider),
-        email(),
-        password(),
-        Padding(padding: EdgeInsets.only(bottom: 85)),
-        button(provider)
-      ],
-    );
-  }
+
+    
 
   Widget buttonBar(SignStateProvider provider) {
     return ButtonBar(
@@ -170,14 +127,14 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
                 fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
         validator: emailValidation,
         onSaved: (String value) {
-          // invoke onSaved when formKey.currentState.Saved() calls
-          print(value);
+          // invoke onSaved when formKey.currentState.Saved() calls          
+          // print(value);
         },
       ),
     );
   }
 
-  Widget password() {
+  Widget loginPassword() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
       child: TextFormField(
@@ -196,9 +153,70 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
         validator: passwordValidation,
         onSaved: (String value) {
           // invoke onSaved when formKey.currentState.Saved() calls
-          print(value);
+          _password = value;
+          // print(value);
         },
       ),
+    );
+  }
+
+  Widget regPassword() {
+    String _confirmPass = '';
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
+          child: TextFormField(
+            obscureText: true,
+            decoration: InputDecoration(
+                isDense: true,
+                errorStyle: TextStyle(
+                  height: 0.4
+                ),
+                icon: Image(
+                  image: AssetImage('images/icons/password.png'),
+                ),
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                    fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
+            validator: (String value){
+              if(_confirmPass == value) return passwordValidation(value);
+              return 'Passwords do not match';
+            },
+            onSaved: (String value) {
+              // invoke onSaved when formKey.currentState.Saved() calls
+              _password = value;
+              // print(value);
+            },
+          ),
+        ),
+        Padding(
+      padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
+      child: TextFormField(
+        obscureText: true,
+        decoration: InputDecoration(
+            isDense: true,
+            errorStyle: TextStyle(
+              height: 0.4
+            ),
+            icon: Image(
+              image: AssetImage('images/icons/password.png'),
+            ),
+            labelText: 'Confirm Password',
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
+        onChanged: (String value){
+          _confirmPass = value;
+        },
+        // onSaved: (String value) {
+        //   // invoke onSaved when formKey.currentState.Saved() calls
+        //   _password = value;
+        //   // print(value);
+        // },
+      ),
+    )
+      ],
     );
   }
 
@@ -220,6 +238,7 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
             labelStyle: TextStyle(
                 fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
         validator: phoneValidation,
+        onSaved: (value) => _mobileNumber = value,
       ),
     );
   }
@@ -239,11 +258,20 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
     );
   }
 
+  Widget loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      CircularProgressIndicator(),
+      Padding(padding: const EdgeInsets.only(left:5)),
+      Text('Validating...Please wait')
+    ],
+  );
+
   Widget button(SignStateProvider provider) {
-    return RaisedButton(
+    return  Provider.of<AuthProvider>(context).loggedInStatus == Status.Authenticating ? loading : RaisedButton(
       elevation: 10,
       padding: EdgeInsets.fromLTRB(35, 10, 35, 10),
-      child: Text(
+      child:Text(
         provider.isSignUp ? 'SIGN UP' : 'SIGN IN',
         style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
       ),
@@ -256,14 +284,98 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
                 .save(); // this will call all onSaved() functions in form
           }
         } else {
-          if (_formKeySignIn.currentState.validate()) {
-            print("user validated, log in");
-            _formKeySignIn.currentState
-                .save(); // this will call all onSaved() functions in form
-          }
+          // if (_formKeySignIn.currentState.validate()) {
+          //   print("user validated, log in");
+          //   _formKeySignIn.currentState
+          //       .save(); // this will call all onSaved() functions in form
+          // }
+          doLogin();
         }
       },
       color: Colors.amberAccent,
     );
   }
+
+
+
+  Widget setContent(SignStateProvider provider) {
+    if (provider.isSignUp) {
+      return Wrap(
+        alignment: WrapAlignment.center,
+        children: [
+          Image.asset(
+            'images/waiterbot_logo.png',
+            width: 100,
+          ),
+          buttonBar(provider),
+          name('First Name'),
+          name('Last Name'),
+          //email(),
+          mobileNumber(),
+          regPassword(),
+          Padding(padding: EdgeInsets.all(5)),
+          checkbox(provider),
+          Padding(padding: EdgeInsets.only(top: 30)),
+          button(provider)
+        ],
+      );
+    }
+    return Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        Image.asset(
+          'images/waiterbot_logo.png',
+          width: 100,
+        ),
+        buttonBar(provider),
+        mobileNumber(),
+        loginPassword(),
+        Padding(padding: EdgeInsets.only(bottom: 85)),
+        button(provider)
+      ],
+    );
+  }
+
+    return Builder(
+      builder: (BuildContext context) {
+        return Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('images/sign_background.jpg'),
+                    fit: BoxFit.fill)),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              // resizeToAvoidBottomInset: false, // prevent shrinking home screen image
+              body: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  height: height-50,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.6),
+                      borderRadius: BorderRadius.all(Radius.circular(65))),
+                  child: SingleChildScrollView(
+                    child: Container(                      
+                      // margin: EdgeInsets.only(left: 45, right: 45, top: 35), // 45
+                      child: Form(
+                        key: Provider.of<SignStateProvider>(context).isSignUp ? _formKeySignUp : _formKeySignIn,
+                        child: Consumer<SignStateProvider>(
+                          builder: (context, provider, child) {
+                            return setContent(provider);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+      },
+    );
+  }
+
+  
+
+  
 }

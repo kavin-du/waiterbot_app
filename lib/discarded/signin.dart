@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../mix_ins/validator_mixin.dart';
-import './signup.dart';
+import 'signup.dart';
 
 class SignIn extends StatefulWidget {
   @override

@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../mix_ins/validator_mixin.dart';
-import './signin.dart';
+import 'signin.dart';
 
-import './licence_agreement.dart';
+import '../screens/licence_agreement.dart';
 
 class SignUp extends StatefulWidget {
   @override
