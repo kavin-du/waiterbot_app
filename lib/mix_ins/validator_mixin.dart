@@ -8,7 +8,7 @@ class ValidatorMixin {
 
   String passwordValidation (String value) {
     // current value of the formfield
-    if(value.length < 8) return 'Password must be at least 8 charactors, with uppercase, lowercase, special, alphanumeric';
+    if(value.length < 8) return 'Password must be at least 8 charactors';
     return null;
   }
 

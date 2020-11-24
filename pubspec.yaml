@@ -66,6 +66,7 @@ flutter:
     - images/icons/lastname.png
     - images/icons/email.png
     - images/icons/password.png
+    - images/icons/confirmpass.png
     - images/icons/phone.png
     - images/icons/otp.png
     - images/icons/resend.png

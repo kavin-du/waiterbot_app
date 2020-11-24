@@ -9,11 +9,24 @@ import 'package:waiterbot_app/providers/auth_provider.dart';
 import '../providers/sign_state_provider.dart';
 import 'licence_agreement.dart';
 
-class SignScreen extends StatelessWidget with ValidatorMixin {
+class SignScreen extends StatefulWidget {
+  @override
+  _SignScreenState createState() => _SignScreenState();
+}
+
+class _SignScreenState extends State<SignScreen> with ValidatorMixin {
   final _formKeySignUp = GlobalKey<FormState>();
   final _formKeySignIn = GlobalKey<FormState>();
 
-  String _mobileNumber, _password;
+  final _confirmPassController = TextEditingController();
+
+  String _firstName, _lastName, _mobileNumber, _password;
+
+  @override
+  void dispose(){
+    _confirmPassController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +62,36 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
     
     }
 
+    void doRegister(){
+      
+      if(_formKeySignUp.currentState.validate() && Provider.of<SignStateProvider>(context, listen:false).checkBoxValue){
+        _formKeySignUp.currentState.save();
+
+        // check this....................listern false
+        final Future<Map<String, dynamic>> successfulMessage = Provider.of<AuthProvider>(context, listen: false)
+          .register(_firstName, _lastName, _mobileNumber, _password);
+
+        successfulMessage.then((response) {
+          if(response['status']){
+            User user = response['user'];
+
+            // Provider.of<UserProvider>(context, listen=false).setUser(user);
+            Navigator.pushReplacementNamed(context, '/success');
+          } else {
+            // print(response);
+            Flushbar(
+              title:'Registering Failed',
+              message: response['message'],
+              duration: Duration(seconds: 3),
+            ).show(context);
+          }
+        });
+      } else {
+        print('invalid form');
+      }
+    
+    }
+
     
 
   Widget buttonBar(SignStateProvider provider) {
@@ -64,6 +107,7 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
           color: provider.isSignUp ? Colors.pink : null,
           onPressed: () {
             provider.signUpScreen();
+            _confirmPassController.clear();
           },
           child: Text('Sign Up'),
         ),
@@ -82,7 +126,7 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
     );
   }
 
-  Widget name(String value) {
+  Widget firstName() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
       child: TextFormField(
@@ -95,44 +139,74 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
               height: 0.4
             ),
             icon: Image(
-              image: AssetImage(value == 'First Name'
-                  ? 'images/icons/firstname.png'
-                  : 'images/icons/lastname.png'),
-            ),
-            labelText: value,
-            hintText: value == 'First Name' ? 'John' : 'Doe',
+              image: AssetImage('images/icons/firstname.png'),
+            ),            
+            labelText: 'First Name',
+            hintText: 'John',
             labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
+                fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)
+        ),
+        onSaved: (String value){
+          _firstName = value;
+        },
       ),
+      
     );
   }
 
-
-  Widget email() {
+  Widget lastName() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        validator: nameValidation,
+        keyboardType: TextInputType.text, // optimize keyboard for name
         decoration: InputDecoration(
+            // contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 35),   
             isDense: true,
             errorStyle: TextStyle(
               height: 0.4
             ),
             icon: Image(
-              image: AssetImage('images/icons/email.png'),
+              image: AssetImage('images/icons/lastname.png'),
             ),
-            labelText: 'E-Mail',
-            hintText: 'example@email.com',
+            labelText: 'Last Name',
+            hintText: 'Doe',
             labelStyle: TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
-        validator: emailValidation,
-        onSaved: (String value) {
-          // invoke onSaved when formKey.currentState.Saved() calls          
-          // print(value);
+                fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)
+        ),
+        onSaved: (String value){
+          _lastName = value;
         },
       ),
     );
   }
+
+
+  // Widget email() {
+  //   return Padding(
+  //     padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
+  //     child: TextFormField(
+  //       keyboardType: TextInputType.emailAddress,
+  //       decoration: InputDecoration(
+  //           isDense: true,
+  //           errorStyle: TextStyle(
+  //             height: 0.4
+  //           ),
+  //           icon: Image(
+  //             image: AssetImage('images/icons/email.png'),
+  //           ),
+  //           labelText: 'E-Mail',
+  //           hintText: 'example@email.com',
+  //           labelStyle: TextStyle(
+  //               fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
+  //       validator: emailValidation,
+  //       onSaved: (String value) {
+  //         // invoke onSaved when formKey.currentState.Saved() calls          
+  //         // print(value);
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget loginPassword() {
     return Padding(
@@ -161,7 +235,6 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
   }
 
   Widget regPassword() {
-    String _confirmPass = '';
 
     return Column(
       children: [
@@ -181,7 +254,9 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
             validator: (String value){
-              if(_confirmPass == value) return passwordValidation(value);
+              print(_confirmPassController.text);
+              print(value);
+              if(_confirmPassController.text == value) return passwordValidation(value);
               return 'Passwords do not match';
             },
             onSaved: (String value) {
@@ -193,34 +268,34 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
         ),
         Padding(
       padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
-      child: TextFormField(
+      child: TextFormField( 
         obscureText: true,
-        decoration: InputDecoration(
+        controller: _confirmPassController,
+        decoration: InputDecoration( 
             isDense: true,
             errorStyle: TextStyle(
               height: 0.4
             ),
             icon: Image(
-              image: AssetImage('images/icons/password.png'),
+              height: 50,
+              image: AssetImage('images/icons/confirmpass.png'),
             ),
             labelText: 'Confirm Password',
             labelStyle: TextStyle(
                 fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
-        onChanged: (String value){
-          _confirmPass = value;
-        },
-        // onSaved: (String value) {
-        //   // invoke onSaved when formKey.currentState.Saved() calls
-        //   _password = value;
-        //   // print(value);
+        // onChanged: (String value){
+        //   _confirmPass = value;
         // },
-      ),
+        // onSaved: (String value){
+        //   _confirmPass = value;
+        // },
+      ), 
     )
       ],
     );
   }
-
-  Widget mobileNumber() {
+ 
+  Widget mobileNumber() { 
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
       child: TextFormField(
@@ -268,7 +343,9 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
   );
 
   Widget button(SignStateProvider provider) {
-    return  Provider.of<AuthProvider>(context).loggedInStatus == Status.Authenticating ? loading : RaisedButton(
+    var loggedInStatus = Provider.of<AuthProvider>(context).loggedInStatus;
+    var registeredStatus = Provider.of<AuthProvider>(context).registeredStatus;
+    return  loggedInStatus == Status.Authenticating || registeredStatus == Status.Authenticating ? loading : RaisedButton(
       elevation: 10,
       padding: EdgeInsets.fromLTRB(35, 10, 35, 10),
       child:Text(
@@ -277,12 +354,12 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
       ),
       onPressed: () {
         if (provider.isSignUp) {
-          if (_formKeySignUp.currentState.validate() &&
-              provider.checkBoxValue) {
-            print("user validated, register");
-            _formKeySignUp.currentState
-                .save(); // this will call all onSaved() functions in form
-          }
+          // if (_formKeySignUp.currentState.validate() &&
+          //     provider.checkBoxValue) {
+          //   print("user validated, register");
+          //   _formKeySignUp.currentState.save(); // this will call all onSaved() functions in form
+          // }
+          doRegister();
         } else {
           // if (_formKeySignIn.currentState.validate()) {
           //   print("user validated, log in");
@@ -308,8 +385,8 @@ class SignScreen extends StatelessWidget with ValidatorMixin {
             width: 100,
           ),
           buttonBar(provider),
-          name('First Name'),
-          name('Last Name'),
+          firstName(),
+          lastName(),
           //email(),
           mobileNumber(),
           regPassword(),

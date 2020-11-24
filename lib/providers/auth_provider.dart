@@ -72,4 +72,49 @@ class AuthProvider with ChangeNotifier {
 
   }
 
+  Future<Map<String, dynamic>> register(String firstName, String lastName, String mobile, String password) async {
+
+    var result;
+
+    final Map<String, dynamic> registerData = {
+      'first_name': firstName,
+      'last_name' : lastName,
+      'mobile': mobile,
+      'password': password
+    };
+
+    _registeredStatus = Status.Authenticating;
+    notifyListeners();
+
+    Response response = await post(
+      AppUrls.register,
+      body: json.encode(registerData),
+      headers: {'Content-type': 'application/json'}
+    );
+
+    if(response.statusCode == 201){
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      var userData = responseData;
+
+      User authUser = User.fromJson(userData);
+
+      UserPreferences().saveUser(authUser);
+
+      _registeredStatus = Status.Registered;
+      notifyListeners();
+
+      result = {'status': true, 'message': 'Register Successful', 'user': authUser};
+
+    } else {
+      _registeredStatus = Status.NotRegistered;
+      notifyListeners();
+
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['message']
+      };
+    }
+    return result;
+  }
 }
