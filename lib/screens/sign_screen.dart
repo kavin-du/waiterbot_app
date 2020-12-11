@@ -1,5 +1,4 @@
 import 'package:flushbar/flushbar.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +36,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
       if(_formKeySignIn.currentState.validate()){
         _formKeySignIn.currentState.save();
 
-        // check this....................listern false
+        // check this........listern false
         final Future<Map<String, dynamic>> successfulMessage = Provider.of<AuthProvider>(context, listen: false)
           .login(_mobileNumber, _password);
 
@@ -94,7 +93,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
 
     
 
-  Widget buttonBar(SignStateProvider provider) {
+  Widget buttonBar() {
     return ButtonBar(
       alignment: MainAxisAlignment.center,
       buttonPadding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 0),
@@ -104,9 +103,9 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(color: Colors.pink, width: 1.5)),
-          color: provider.isSignUp ? Colors.pink : null,
+          color: Provider.of<SignStateProvider>(context, listen: false).isSignUp ? Colors.pink : null,
           onPressed: () {
-            provider.signUpScreen();
+            Provider.of<SignStateProvider>(context, listen: false).signUpScreen();
             _confirmPassController.clear();
           },
           child: Text('Sign Up'),
@@ -116,9 +115,9 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
               side: BorderSide(color: Colors.pink, width: 1.5)),
-          color: !provider.isSignUp ? Colors.pink : null,
+          color: !(Provider.of<SignStateProvider>(context, listen: false).isSignUp) ? Colors.pink : null,
           onPressed: () {
-            provider.signInScreen();
+            Provider.of<SignStateProvider>(context, listen: false).signInScreen();
           },
           child: Text('Sign In'),
         )
@@ -181,32 +180,6 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
     );
   }
 
-
-  // Widget email() {
-  //   return Padding(
-  //     padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
-  //     child: TextFormField(
-  //       keyboardType: TextInputType.emailAddress,
-  //       decoration: InputDecoration(
-  //           isDense: true,
-  //           errorStyle: TextStyle(
-  //             height: 0.4
-  //           ),
-  //           icon: Image(
-  //             image: AssetImage('images/icons/email.png'),
-  //           ),
-  //           labelText: 'E-Mail',
-  //           hintText: 'example@email.com',
-  //           labelStyle: TextStyle(
-  //               fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
-  //       validator: emailValidation,
-  //       onSaved: (String value) {
-  //         // invoke onSaved when formKey.currentState.Saved() calls          
-  //         // print(value);
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget loginPassword() {
     return Padding(
@@ -318,15 +291,14 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
     );
   }
 
-  Widget checkbox(SignStateProvider provider) {
+  Widget checkbox() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Checkbox(
-            value: provider.checkBoxValue, // ?
+            value: Provider.of<SignStateProvider>(context, listen: false).checkBoxValue, // ?
             onChanged: (bool value) {
-              provider.setCheckBox(value);
-              // print(parent.checkBoxValue);
+              Provider.of<SignStateProvider>(context, listen: false).setCheckBox(value);
             }),
         Licence(),
       ],
@@ -342,30 +314,20 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
     ],
   );
 
-  Widget button(SignStateProvider provider) {
+  Widget button() {
     var loggedInStatus = Provider.of<AuthProvider>(context).loggedInStatus;
     var registeredStatus = Provider.of<AuthProvider>(context).registeredStatus;
     return  loggedInStatus == Status.Authenticating || registeredStatus == Status.Authenticating ? loading : RaisedButton(
       elevation: 10,
       padding: EdgeInsets.fromLTRB(35, 10, 35, 10),
       child:Text(
-        provider.isSignUp ? 'SIGN UP' : 'SIGN IN',
+        Provider.of<SignStateProvider>(context, listen: false).isSignUp ? 'SIGN UP' : 'SIGN IN',
         style: TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        if (provider.isSignUp) {
-          // if (_formKeySignUp.currentState.validate() &&
-          //     provider.checkBoxValue) {
-          //   print("user validated, register");
-          //   _formKeySignUp.currentState.save(); // this will call all onSaved() functions in form
-          // }
+        if (Provider.of<SignStateProvider>(context, listen: false).isSignUp) {        
           doRegister();
-        } else {
-          // if (_formKeySignIn.currentState.validate()) {
-          //   print("user validated, log in");
-          //   _formKeySignIn.currentState
-          //       .save(); // this will call all onSaved() functions in form
-          // }
+        } else {         
           doLogin();
         }
       },
@@ -384,16 +346,15 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
             'images/waiterbot_logo.png',
             width: 100,
           ),
-          buttonBar(provider),
+          buttonBar(),
           firstName(),
           lastName(),
-          //email(),
           mobileNumber(),
           regPassword(),
           Padding(padding: EdgeInsets.all(5)),
-          checkbox(provider),
+          checkbox(),
           Padding(padding: EdgeInsets.only(top: 30)),
-          button(provider)
+          button()
         ],
       );
     }
@@ -404,11 +365,11 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
           'images/waiterbot_logo.png',
           width: 100,
         ),
-        buttonBar(provider),
+        buttonBar(),
         mobileNumber(),
         loginPassword(),
         Padding(padding: EdgeInsets.only(bottom: 85)),
-        button(provider)
+        button()
       ],
     );
   }
