@@ -58,10 +58,12 @@ flutter:
     - images/sign_background.jpg
     - images/slide_background.jpg
     - images/waiterbot_logo.png
+    - images/red_cafe.png
     - images/slides1.jpg
     - images/slides2.jpg
     - images/slides3.jpg
     - images/slides4.jpg
+    - images/foods/chicken-fried-rice.jpg
     - images/icons/firstname.png
     - images/icons/lastname.png
     - images/icons/email.png
