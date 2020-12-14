@@ -20,9 +20,12 @@ class _FoodCardState extends State<FoodCard> {
     final finalOrdersProvider = Provider.of<FinalOrdersProvider>(context);
 
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.blue[300],
+        borderRadius: BorderRadius.circular(10)
+      ),
       margin: const EdgeInsets.all(3),
       padding: const EdgeInsets.only(top: 4, bottom: 12),
-      color: Colors.blue[300],
       child: Column(
         children: [
           Text(
@@ -42,7 +45,7 @@ class _FoodCardState extends State<FoodCard> {
                 width: 100
               ),
               FlatButton(
-                child: Text('ADD TO LIST '),
+                child: Text('ADD TO LIST'),
                 onPressed: (){
                   FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions.keys.toList()[_portionIndex]);
                   finalOrdersProvider.addOrder(newfooditem);

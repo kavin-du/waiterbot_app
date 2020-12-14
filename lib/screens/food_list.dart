@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/food_card.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
+import 'package:waiterbot_app/screens/order_confirmation.dart';
 
 import 'success_screen.dart';
 
@@ -82,7 +83,7 @@ class _FoodListState extends State<FoodList> {
           floatingActionButton: FloatingActionButton(
             child: Image.asset('images/floating-button.png'),
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessScreen(result: 'fsaf')));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => OrderConfirmation()));
             },
           ),
           body: SafeArea(

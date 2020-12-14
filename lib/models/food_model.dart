@@ -3,9 +3,9 @@ import 'package:equatable/equatable.dart';
 class FoodItem extends Equatable{
   String _name;
   String _category;
-  Map<String, double> _portions;
   int _units;
   String _selectedPortion;
+  Map<String, double> _portions;
 
   FoodItem(String name, String category, Map<String, double> portions){
     _name = name;

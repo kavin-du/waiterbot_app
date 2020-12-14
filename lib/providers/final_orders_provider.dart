@@ -28,5 +28,16 @@ class FinalOrdersProvider with ChangeNotifier {
     _orders.remove(id);
     notifyListeners();
   }
+  double get getTotal{
+    double total = 0;
+    if(_orders.keys != null){
+      _orders.keys.forEach((k) { 
+        FoodItem item = _orders[k];
+        total += (item.units * item.portions[item.selectedPortion]);
+      });
+    }
+    return total;
+  }
+
   Map<int, FoodItem> get getOrders => _orders;
 }
