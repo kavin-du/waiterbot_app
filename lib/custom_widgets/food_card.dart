@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/food_model.dart';
+import 'package:waiterbot_app/providers/final_orders_provider.dart';
 
 class FoodCard extends StatefulWidget {
   final FoodItem foodItem;
-  int _count = 1;
-  int _portionIndex = 0;
   FoodCard({Key key, @required this.foodItem}) : super(key: key);
   
   @override
   _FoodCardState createState() => _FoodCardState();
 }
 
-class _FoodCardState extends State<FoodCard> {
+class _FoodCardState extends State<FoodCard> {  
+  int _count = 1;
+  int _portionIndex = 0;   
+
   @override
   Widget build(BuildContext context) {
+    final finalOrdersProvider = Provider.of<FinalOrdersProvider>(context);
+
     return Container(
       margin: const EdgeInsets.all(3),
       padding: const EdgeInsets.only(top: 4, bottom: 12),
@@ -27,13 +32,21 @@ class _FoodCardState extends State<FoodCard> {
               fontSize: 25,
             ),
           ),
+          SizedBox(height: 5),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset('images/foods/chicken-fried-rice.jpg', height: 100),
+              Image.asset(
+                'images/foods/chicken-fried-rice.jpg', 
+                height: 100, 
+                width: 100
+              ),
               FlatButton(
                 child: Text('ADD TO LIST '),
-                onPressed: (){},
+                onPressed: (){
+                  FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions.keys.toList()[_portionIndex]);
+                  finalOrdersProvider.addOrder(newfooditem);
+                },
                 color: Colors.yellow,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35))
               ),
@@ -58,11 +71,11 @@ class _FoodCardState extends State<FoodCard> {
                           child: Text('-', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.white),),
                           onPressed: (){
                             setState(() {
-                              if(widget._count > 1) widget._count--;
+                              if(_count > 1) _count--;
                             });
                           },
                         ),
-                        Container(width: 40, child: Center(child: Text(widget._count.toString()))),
+                        Container(width: 40, child: Center(child: Text(_count.toString()))),
                         FlatButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           padding: const EdgeInsets.all(0),
@@ -72,7 +85,7 @@ class _FoodCardState extends State<FoodCard> {
                           child: Text('+', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
                           onPressed: (){
                             setState(() {
-                              widget._count++;
+                              _count++;
                             });
                           },
                         ),
@@ -97,14 +110,14 @@ class _FoodCardState extends State<FoodCard> {
                           minWidth: 20,                            
                           child: Text('<', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),),
                           onPressed: (){
-                            if(widget._portionIndex > 0){
+                            if(_portionIndex > 0){
                               setState(() {
-                                widget._portionIndex--;                                
+                                _portionIndex--;                                
                               });
                             }
                           },
                         ),
-                        Container(width: 40, child: Center(child: Text(widget.foodItem.portions.keys.toList()[widget._portionIndex].toString()))),
+                        Container(width: 40, child: Center(child: Text(widget.foodItem.portions.keys.toList()[_portionIndex].toString()))),
                         FlatButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           padding: const EdgeInsets.all(0),
@@ -113,9 +126,9 @@ class _FoodCardState extends State<FoodCard> {
                           minWidth: 20,                            
                           child: Text('>', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),),
                           onPressed: (){
-                            if(widget._portionIndex < widget.foodItem.portions.keys.toList().length -1){
+                            if(_portionIndex < widget.foodItem.portions.keys.toList().length -1){
                               setState(() {
-                                widget._portionIndex++;
+                                _portionIndex++;
                               });
                             }
                           },
@@ -123,7 +136,7 @@ class _FoodCardState extends State<FoodCard> {
                       ],
                     ),
                   ),
-                  Text('LKR '+(widget.foodItem.portions[widget.foodItem.portions.keys.toList()[widget._portionIndex]] * widget._count).toString(), style: TextStyle(fontSize: 18),)
+                  Text('LKR '+(widget.foodItem.portions[widget.foodItem.portions.keys.toList()[_portionIndex]] * _count).toString(), style: TextStyle(fontSize: 18),)
                 ],
               )
             ],

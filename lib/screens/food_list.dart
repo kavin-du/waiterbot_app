@@ -4,6 +4,8 @@ import 'package:waiterbot_app/custom_widgets/food_card.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
 
+import 'success_screen.dart';
+
 class FoodList extends StatefulWidget {
   @override
   _FoodListState createState() => _FoodListState();
@@ -77,6 +79,12 @@ class _FoodListState extends State<FoodList> {
     return Builder(
       builder: (BuildContext context){
         return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            child: Image.asset('images/floating-button.png'),
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SuccessScreen(result: 'fsaf')));
+            },
+          ),
           body: SafeArea(
             child: Column(children: [
               Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:waiterbot_app/providers/final_orders_provider.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
 import 'package:waiterbot_app/screens/qrscan.dart';
 import 'package:waiterbot_app/screens/sign_screen.dart';
@@ -21,6 +22,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => SignStateProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),  
         ChangeNotifierProvider(create: (context) => FoodListProvider()),
+        ChangeNotifierProvider(create: (context) => FinalOrdersProvider()), // add only to the relevant parent
       ],
       child: MaterialApp(
       // home: OTP(),
