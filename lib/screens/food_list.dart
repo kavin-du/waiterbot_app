@@ -85,6 +85,7 @@ class _FoodListState extends State<FoodList> {
             onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => OrderConfirmation()));
             },
+            tooltip: 'Check your orders & Purchase',
           ),
           body: SafeArea(
             child: Column(children: [
