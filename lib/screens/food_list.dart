@@ -5,8 +5,6 @@ import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
 import 'package:waiterbot_app/screens/order_confirmation.dart';
 
-import 'success_screen.dart';
-
 class FoodList extends StatefulWidget {
   @override
   _FoodListState createState() => _FoodListState();

@@ -1,6 +1,6 @@
 class AppUrls{
   static const String remoteBaseUrl = '';
-  static const String localBaseUrl = 'http://192.168.8.134:3000/api';
+  static const String localBaseUrl = 'http://10.0.2.2:3000/api';
 
   static const String baseUrl = localBaseUrl;
 

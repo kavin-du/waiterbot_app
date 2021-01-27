@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
 
+import 'rating_starts.dart';
+
 class FoodCard extends StatefulWidget {
   final FoodItem foodItem;
   FoodCard({Key key, @required this.foodItem}) : super(key: key);
@@ -44,14 +46,19 @@ class _FoodCardState extends State<FoodCard> {
                 height: 100, 
                 width: 100
               ),
-              FlatButton(
-                child: Text('ADD TO LIST'),
-                onPressed: (){
-                  FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions.keys.toList()[_portionIndex]);
-                  finalOrdersProvider.addOrder(newfooditem);
-                },
-                color: Colors.yellow,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35))
+              Column(
+                children: [
+                  RatingStars(value: 3),
+                  FlatButton(
+                    child: Text('ADD TO LIST'),
+                    onPressed: (){
+                      FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions.keys.toList()[_portionIndex]);
+                      finalOrdersProvider.addOrder(newfooditem);
+                    },
+                    color: Colors.yellow,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35))
+                  ),
+                ],
               ),
               Column(  
                 children: [

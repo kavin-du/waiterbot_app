@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
+import 'package:waiterbot_app/screens/enter_shopId.dart';
 import 'package:waiterbot_app/screens/qrscan.dart';
 import 'package:waiterbot_app/screens/sign_screen.dart';
 import 'package:waiterbot_app/screens/success_screen.dart';
@@ -13,6 +14,12 @@ import './screens/qrscan.dart';
 import 'providers/auth_provider.dart';
 import 'providers/sign_state_provider.dart';
 import 'screens/food_list.dart';
+
+///
+// ? register -> OTP -> imageslider -> qr scan -> food list
+// ! login -> qr scan -> food list
+/// 
+// TODO: when launched: qr scan
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -25,12 +32,16 @@ void main() {
         ChangeNotifierProvider(create: (context) => FinalOrdersProvider()), // add only to the relevant parent
       ],
       child: MaterialApp(
+      home: SignScreen(),
       // home: OTP(),
-      // home: ImageSlides(),      
-      // home: SignScreen(),
-      home: FoodList(),
+      // home: ImageSlides(),  
+      // home: QRScan(), 
+      // home: EnterShopId(),   
+      // home: FoodList(),
       routes: {
-        '/success': (context) => SuccessScreen(result: 'this is by qrcode',),
+        // '/success': (context) => SuccessScreen(result: 'this is by qrcode',),
+        '/enterShopId': (context) => EnterShopId(),
+        '/imageSlides': (context) => ImageSlides(),
       },
     ),
   ));

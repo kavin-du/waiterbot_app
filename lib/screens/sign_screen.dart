@@ -45,7 +45,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
             User user = response['user'];
 
             // Provider.of<UserProvider>(context, listen=false).setUser(user);
-            Navigator.pushReplacementNamed(context, '/success');
+            Navigator.pushReplacementNamed(context, '/enterShopId');
           } else {
             // print(response);
             Flushbar(
@@ -75,7 +75,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
             User user = response['user'];
 
             // Provider.of<UserProvider>(context, listen=false).setUser(user);
-            Navigator.pushReplacementNamed(context, '/success');
+            Navigator.pushReplacementNamed(context, '/imageSlides');
           } else {
             // print(response);
             Flushbar(
