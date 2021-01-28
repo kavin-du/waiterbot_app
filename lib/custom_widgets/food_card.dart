@@ -41,18 +41,18 @@ class _FoodCardState extends State<FoodCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset(
-                'images/foods/chicken-fried-rice.jpg', 
+              Image.network(
+                widget.foodItem.image, 
                 height: 100, 
                 width: 100
               ),
               Column(
                 children: [
-                  RatingStars(value: 3),
+                  RatingStars(value: widget.foodItem.stars == 0 ? 0 : (widget.foodItem.stars/widget.foodItem.reviewCount).round()),
                   FlatButton(
                     child: Text('ADD TO LIST'),
                     onPressed: (){
-                      FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions.keys.toList()[_portionIndex]);
+                      FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions[_portionIndex]['name']);
                       finalOrdersProvider.addOrder(newfooditem);
                     },
                     color: Colors.yellow,
@@ -127,7 +127,7 @@ class _FoodCardState extends State<FoodCard> {
                             }
                           },
                         ),
-                        Container(width: 40, child: Center(child: Text(widget.foodItem.portions.keys.toList()[_portionIndex].toString()))),
+                        Container(width: 40, child: Center(child: Text(widget.foodItem.portions[_portionIndex]['name'].toString()))),
                         FlatButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           padding: const EdgeInsets.all(0),
@@ -136,7 +136,7 @@ class _FoodCardState extends State<FoodCard> {
                           minWidth: 20,                            
                           child: Text('>', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Colors.white),),
                           onPressed: (){
-                            if(_portionIndex < widget.foodItem.portions.keys.toList().length -1){
+                            if(_portionIndex < widget.foodItem.portions.length -1){
                               setState(() {
                                 _portionIndex++;
                               });
@@ -146,7 +146,7 @@ class _FoodCardState extends State<FoodCard> {
                       ],
                     ),
                   ),
-                  Text('LKR '+(widget.foodItem.portions[widget.foodItem.portions.keys.toList()[_portionIndex]] * _count).toString(), style: TextStyle(fontSize: 18),)
+                  Text('LKR '+(widget.foodItem.portions[_portionIndex]['price'] * _count).toString(), style: TextStyle(fontSize: 18),)
                 ],
               )
             ],

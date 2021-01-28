@@ -36,7 +36,9 @@ class OrderConfirmation extends StatelessWidget {
                   'CONFIRM & PAY',
                   style: TextStyle(fontSize: 35, color: Colors.white),
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  print(_finalOrdersProvider.getOrders.values.toList()[0].selectedPortion);
+                },
               ) : Container()
             ],
           )),

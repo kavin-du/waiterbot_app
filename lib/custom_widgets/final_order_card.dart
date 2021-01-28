@@ -38,7 +38,7 @@ class FinalOrderCard extends StatelessWidget {
                     Text(_finalOrdersProvider.getOrders[_keys[index]].name, style: textStyle),
                     Text('Amount: '+_finalOrdersProvider.getOrders[_keys[index]].units.toString(), style: textStyle),
                     Text('Size: '+_finalOrdersProvider.getOrders[_keys[index]].selectedPortion, style: textStyle),
-                    Text('Total: LKR '+(_finalOrdersProvider.getOrders[_keys[index]].portions[_finalOrdersProvider.getOrders[_keys[index]].selectedPortion]*
+                    Text('Total: LKR '+(_finalOrdersProvider.getOrders[_keys[index]].portions.firstWhere((element) => element['name'] == _finalOrdersProvider.getOrders[_keys[index]].selectedPortion)['price']*
                     _finalOrdersProvider.getOrders[_keys[index]].units).toString(), style: textStyle),
                   ],
                 ),

@@ -125,7 +125,7 @@ class _ImageSlidesState extends State<ImageSlides> with ValidatorMixin {
         style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        Navigator.pushReplacementNamed(context, '/enterShopId');
+        Navigator.pushReplacementNamed(context, '/signScreen');
       },
       color: Colors.amberAccent,
     );

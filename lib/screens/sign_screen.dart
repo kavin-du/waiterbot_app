@@ -75,7 +75,15 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
             User user = response['user'];
 
             // Provider.of<UserProvider>(context, listen=false).setUser(user);
+
+            Provider.of<SignStateProvider>(context, listen: false).signInScreen();
             Navigator.pushReplacementNamed(context, '/imageSlides');
+            Flushbar(
+              title:'Please LogIn.',
+              message: response['message'],
+              duration: Duration(seconds: 5),
+            ).show(context);
+
           } else {
             // print(response);
             Flushbar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waiterbot_app/services/app_urls.dart';
 
 class EnterShopId extends StatelessWidget {
   @override
@@ -21,7 +22,9 @@ class EnterShopId extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: (){
-              print(_textController.text);
+              // print(_textController.text);
+              AppUrls.setShopId = _textController.text;
+              Navigator.pushNamed(context, '/foodList');
             }, 
             child: Text('Submit')
           )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
 import 'package:waiterbot_app/screens/enter_shopId.dart';
@@ -30,18 +31,22 @@ void main() {
         ChangeNotifierProvider(create: (context) => AuthProvider()),  
         ChangeNotifierProvider(create: (context) => FoodListProvider()),
         ChangeNotifierProvider(create: (context) => FinalOrdersProvider()), // add only to the relevant parent
+        ChangeNotifierProvider(create: (context) => FetchShopItems()),
+
       ],
       child: MaterialApp(
-      home: SignScreen(),
+      // home: SignScreen(),
       // home: OTP(),
-      // home: ImageSlides(),  
+      // * home: ImageSlides(),  
       // home: QRScan(), 
-      // home: EnterShopId(),   
-      // home: FoodList(),
+      // * home: EnterShopId(),   
+      home: FoodList(),
       routes: {
         // '/success': (context) => SuccessScreen(result: 'this is by qrcode',),
         '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),
+        '/signScreen': (context) => SignScreen(),
+        '/foodList': (context) => FoodList(),
       },
     ),
   ));

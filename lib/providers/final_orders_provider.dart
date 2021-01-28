@@ -33,7 +33,7 @@ class FinalOrdersProvider with ChangeNotifier {
     if(_orders.keys != null){
       _orders.keys.forEach((k) { 
         FoodItem item = _orders[k];
-        total += (item.units * item.portions[item.selectedPortion]);
+        total += (item.units * item.portions.firstWhere((element) => element['name'] == item.selectedPortion)['price']);
       });
     }
     return total;
