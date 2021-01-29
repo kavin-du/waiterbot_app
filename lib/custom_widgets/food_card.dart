@@ -48,7 +48,7 @@ class _FoodCardState extends State<FoodCard> {
               ),
               Column(
                 children: [
-                  RatingStars(value: widget.foodItem.stars == 0 ? 0 : (widget.foodItem.stars/widget.foodItem.reviewCount).round()),
+                  RatingStars(foodItem: widget.foodItem),
                   FlatButton(
                     child: Text('ADD TO LIST'),
                     onPressed: (){

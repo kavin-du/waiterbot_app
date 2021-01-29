@@ -1,14 +1,19 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/final_order_card.dart';
+import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
+
+import 'order_status.dart';
 
 class OrderConfirmation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final _finalOrdersProvider = Provider.of<FinalOrdersProvider>(context);
-
+    final _fetchShopItems = Provider.of<FetchShopItems>(context, listen: false); 
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Orders'),
@@ -36,8 +41,25 @@ class OrderConfirmation extends StatelessWidget {
                   'CONFIRM & PAY',
                   style: TextStyle(fontSize: 35, color: Colors.white),
                 ),
-                onPressed: (){
-                  print(_finalOrdersProvider.getOrders.values.toList()[0].selectedPortion);
+                onPressed: () async {
+                  // print(_finalOrdersProvider.getOrders.values.toList()[0].selectedPortion);
+                  Map<String, dynamic> result;
+                  await 
+                    _fetchShopItems.placeOrder(_finalOrdersProvider.getOrders.values.toList(), _finalOrdersProvider.getTotal)
+                    .then((value) => result = Map<String, dynamic>.from(value))
+                    .whenComplete(() {
+                      // print(result);
+                      Flushbar(
+                        duration: Duration(seconds: 4),
+                        title:"Hi",
+                        message: Map<String, dynamic>.from(result)['message'],
+                      ).show(context);
+                      
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => OrderStatus())
+                      );
+                    });
                 },
               ) : Container()
             ],

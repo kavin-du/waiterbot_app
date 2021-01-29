@@ -121,8 +121,8 @@ class _FoodListState extends State<FoodList> {
     }
 
 
-    return Builder(
-      builder: (BuildContext context){
+    // return Builder(
+    //   builder: (BuildContext context){
         return Scaffold(
           floatingActionButton: FloatingActionButton(
             child: Image.asset('images/floating-button.png'),
@@ -168,7 +168,7 @@ class _FoodListState extends State<FoodList> {
             ]),
           ),
         );
-      }
-    );
+    //   }
+    // );
   }
 }
