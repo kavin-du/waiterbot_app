@@ -37,6 +37,10 @@ dependencies:
   shared_preferences: ^0.5.8
   flushbar: ^1.10.4
   equatable: ^1.2.5
+  web_socket_channel: ^1.2.0
+  socket_io_client: ^0.9.12
+  cached_network_image: ^2.5.0
+  adhara_socket_io: ^0.4.2+1
 
 
 dev_dependencies:

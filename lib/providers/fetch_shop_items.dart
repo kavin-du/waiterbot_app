@@ -8,10 +8,10 @@ import 'package:waiterbot_app/services/app_urls.dart';
 import 'package:waiterbot_app/services/shared_preferences.dart';
 
 enum Status { Fetching, FetchComplete, FetchFailed }
-String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxMTg1MzU0NSwiZXhwIjoxNjEyNDU4MzQ1fQ.TsuPA7YzfU9Xn81OmjZp3RWCY-x5yjvccNS7e-H41Cc";
 
 class FetchShopItems with ChangeNotifier {
   Status _fetchStatus = Status.Fetching;
+  static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxMTg1MzU0NSwiZXhwIjoxNjEyNDU4MzQ1fQ.TsuPA7YzfU9Xn81OmjZp3RWCY-x5yjvccNS7e-H41Cc";
 
   Status get fetchStatus => _fetchStatus;
 

@@ -8,9 +8,11 @@ class SuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Success'),
+        title: Text('Hi'),
       ),
-      // body: 
+      body: Center(
+        child: Text(result.toString()),
+      ) 
     );
   }
 

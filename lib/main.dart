@@ -39,7 +39,7 @@ void main() {
       // home: OTP(),
       // * home: ImageSlides(),  
       // home: QRScan(), 
-      // * home: EnterShopId(),   
+      // home: EnterShopId(),   
       home: FoodList(),
       routes: {
         // '/success': (context) => SuccessScreen(result: 'this is by qrcode',),
@@ -47,7 +47,9 @@ void main() {
         '/imageSlides': (context) => ImageSlides(),
         '/signScreen': (context) => SignScreen(),
         '/foodList': (context) => FoodList(),
+        '/qrScan': (context) => QRScan(),
       },
+      debugShowCheckedModeBanner: false,
     ),
   ));
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/food_card.dart';
@@ -124,12 +125,15 @@ class _FoodListState extends State<FoodList> {
     // return Builder(
     //   builder: (BuildContext context){
         return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            child: Image.asset('images/floating-button.png'),
-            onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => OrderConfirmation()));
-            },
-            tooltip: 'Check your orders & Purchase',
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 70),
+            child: FloatingActionButton(
+              child: Image.asset('images/floating-button.png'),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => OrderConfirmation()));
+              },
+              tooltip: 'Check your orders & Purchase',
+            ),
           ),
           body: SafeArea(
             child: Column(children: [
@@ -144,9 +148,15 @@ class _FoodListState extends State<FoodList> {
                           return Column(
                             children: [
                               SizedBox(height: 15),
-                              Image.network(
-                                snapshot.data['imgUrl'], //'images/red_cafe.png',
+                              // Image.network(
+                              //   snapshot.data['imgUrl'], //'images/red_cafe.png',
+                              //   height: 100,
+                              // ),
+                              CachedNetworkImage(
                                 height: 100,
+                                imageUrl: snapshot.data['imgUrl'],
+                                placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
                               ),
                               SizedBox(height: 15),
                               Text(snapshot.data['name']),
@@ -161,8 +171,6 @@ class _FoodListState extends State<FoodList> {
                     )
                 ),
               ),
-              // _fetchShopItems.fetchStatus == Status.Fetching ? CircularProgressIndicator() : buttonBar(),
-              // _fetchShopItems.fetchStatus == Status.Fetching ? CircularProgressIndicator() : foodCards()
               buttonBarAndFoodCards(),
               // foodCards(),
             ]),

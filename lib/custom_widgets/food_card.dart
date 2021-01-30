@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/food_model.dart';
@@ -41,10 +42,17 @@ class _FoodCardState extends State<FoodCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.network(
-                widget.foodItem.image, 
-                height: 100, 
-                width: 100
+              // Image.network(
+              //   widget.foodItem.image, 
+              //   height: 100, 
+              //   width: 100
+              // ),
+              CachedNetworkImage(
+                width: 100,
+                height: 100,
+                imageUrl: widget.foodItem.image,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               Column(
                 children: [
@@ -55,6 +63,7 @@ class _FoodCardState extends State<FoodCard> {
                       FoodItem newfooditem = FoodItem.forFinalOrder(widget.foodItem, _count, widget.foodItem.portions[_portionIndex]['name']);
                       finalOrdersProvider.addOrder(newfooditem);
                     },
+                    highlightColor: Colors.red,
                     color: Colors.yellow,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35))
                   ),
@@ -127,7 +136,7 @@ class _FoodCardState extends State<FoodCard> {
                             }
                           },
                         ),
-                        Container(width: 40, child: Center(child: Text(widget.foodItem.portions[_portionIndex]['name'].toString()))),
+                        Container(width: 48, child: Center(child: Text(widget.foodItem.portions[_portionIndex]['name'].toString()))),
                         FlatButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           padding: const EdgeInsets.all(0),
