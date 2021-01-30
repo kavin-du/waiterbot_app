@@ -6,7 +6,7 @@ class AppUrls{
   // static String _tableId = "";
   
   // static const String websocketUrl = "ws://waiterbot-api.us-east-1.elasticbeanstalk.com";
-  static const String websocketUrl = "ws://10.0.2.2:3000/";
+  static const String websocketUrl = "http://waiterbot-api.us-east-1.elasticbeanstalk.com";
   static const String remoteBaseUrl = 'http://waiterbot-api.us-east-1.elasticbeanstalk.com/'+'api';
   static const String localBaseUrl = 'http://10.0.2.2:3000/api';
 

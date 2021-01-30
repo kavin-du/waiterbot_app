@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:waiterbot_app/custom_widgets/custom_appbar.dart';
 import 'package:waiterbot_app/custom_widgets/food_card.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/fetch_shop_items.dart';
@@ -125,6 +127,7 @@ class _FoodListState extends State<FoodList> {
     // return Builder(
     //   builder: (BuildContext context){
         return Scaffold(
+          appBar: CustomAppBar(title: 'Welcome',),
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 70),
             child: FloatingActionButton(

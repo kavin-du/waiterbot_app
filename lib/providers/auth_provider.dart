@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/user_model.dart';
+import 'package:waiterbot_app/providers/notification_provider.dart';
 import 'package:waiterbot_app/services/app_urls.dart';
 import 'package:waiterbot_app/services/shared_preferences.dart';
 
-
-enum Status{
+enum Status {
   NotLoggedIn,
   NotRegistered,
   LoggedIn,
@@ -23,11 +24,13 @@ class AuthProvider with ChangeNotifier {
 
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredStatus => _registeredStatus;
+  
+  NotificationProvider notificationProvider;
 
-
-  Future<Map<String, dynamic>> login(String mobileNumber, String password) async {
+  Future<Map<String, dynamic>> login(BuildContext context,
+      String mobileNumber, String password) async {
     var result;
-
+     notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     final Map<String, dynamic> loginData = {
       'mobile': mobileNumber,
       'password': password
@@ -36,13 +39,11 @@ class AuthProvider with ChangeNotifier {
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
-    Response response = await post(
-      AppUrls.login,
-      body: json.encode(loginData),
-      headers: {'Content-type': 'application/json'}
-    );
-    
-    if(response.statusCode == 200){
+    Response response = await post(AppUrls.login,
+        body: json.encode(loginData),
+        headers: {'Content-type': 'application/json'});
+
+    if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       var userData = responseData; // ?
@@ -53,10 +54,9 @@ class AuthProvider with ChangeNotifier {
 
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
-
+      notificationProvider.connectToSocket(userData['token']);
       result = {'status': true, 'message': 'Successful', 'user': authUser};
-
-
+      
     } else {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
@@ -68,16 +68,15 @@ class AuthProvider with ChangeNotifier {
     }
 
     return result;
-
   }
 
-  Future<Map<String, dynamic>> register(String firstName, String lastName, String mobile, String password) async {
-
+  Future<Map<String, dynamic>> register(
+      String firstName, String lastName, String mobile, String password) async {
     var result;
 
     final Map<String, dynamic> registerData = {
       'first_name': firstName,
-      'last_name' : lastName,
+      'last_name': lastName,
       'mobile': mobile,
       'password': password
     };
@@ -85,13 +84,11 @@ class AuthProvider with ChangeNotifier {
     _registeredStatus = Status.Authenticating;
     notifyListeners();
 
-    Response response = await post(
-      AppUrls.register,
-      body: json.encode(registerData),
-      headers: {'Content-type': 'application/json'}
-    );
+    Response response = await post(AppUrls.register,
+        body: json.encode(registerData),
+        headers: {'Content-type': 'application/json'});
 
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       var userData = responseData;
@@ -103,8 +100,11 @@ class AuthProvider with ChangeNotifier {
       _registeredStatus = Status.Registered;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Register Successful', 'user': authUser};
-
+      result = {
+        'status': true,
+        'message': 'Register Successful',
+        'user': authUser
+      };
     } else {
       _registeredStatus = Status.NotRegistered;
       notifyListeners();

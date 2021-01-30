@@ -13,8 +13,10 @@ import './screens/otp.dart';
 import './screens/image_slides.dart';
 import './screens/qrscan.dart';
 import 'providers/auth_provider.dart';
+import 'providers/notification_provider.dart';
 import 'providers/sign_state_provider.dart';
 import 'screens/food_list.dart';
+import 'screens/notifications.dart';
 
 ///
 // ? register -> OTP -> imageslider -> qr scan -> food list
@@ -32,22 +34,23 @@ void main() {
         ChangeNotifierProvider(create: (context) => FoodListProvider()),
         ChangeNotifierProvider(create: (context) => FinalOrdersProvider()), // add only to the relevant parent
         ChangeNotifierProvider(create: (context) => FetchShopItems()),
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
 
       ],
       child: MaterialApp(
-      // home: SignScreen(),
+      home: SignScreen(),
       // home: OTP(),
       // * home: ImageSlides(),  
       // home: QRScan(), 
       // home: EnterShopId(),   
-      home: FoodList(),
+      // home: FoodList(),
       routes: {
-        // '/success': (context) => SuccessScreen(result: 'this is by qrcode',),
         '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),
         '/signScreen': (context) => SignScreen(),
         '/foodList': (context) => FoodList(),
         '/qrScan': (context) => QRScan(),
+        '/notifications': (context) => Notifications(),
       },
       debugShowCheckedModeBanner: false,
     ),

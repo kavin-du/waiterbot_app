@@ -41,6 +41,7 @@ dependencies:
   socket_io_client: ^0.9.12
   cached_network_image: ^2.5.0
   adhara_socket_io: ^0.4.2+1
+  flutter_local_notifications: ^1.4.4+1
 
 
 dev_dependencies:
