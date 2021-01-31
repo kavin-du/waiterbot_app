@@ -5,14 +5,6 @@ import 'package:waiterbot_app/mix_ins/validator_mixin.dart';
 // these are unit tests
 void main() {
 
-    // setup
-
-    // run 
-
-    // verify
-
-  // you can add several expects to single test
-  // startUp(){} , tearDown(){} -> calls before and after each test
   group('Email testing', (){
     test('empty email returns error message', (){
       
