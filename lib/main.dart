@@ -15,6 +15,7 @@ import './screens/qrscan.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/sign_state_provider.dart';
+import 'screens/error_screen.dart';
 import 'screens/food_list.dart';
 import 'screens/notifications.dart';
 
@@ -39,6 +40,7 @@ void main() {
       ],
       child: MaterialApp(
       home: SignScreen(),
+      // home: ErrorScreen("hello error"),
       // home: OTP(),
       // * home: ImageSlides(),  
       // home: QRScan(), 
