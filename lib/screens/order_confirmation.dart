@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/final_order_card.dart';
 import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
-import 'package:waiterbot_app/services/app_urls.dart';
 import 'package:waiterbot_app/services/shared_preferences.dart';
-import 'package:web_socket_channel/io.dart';
 
 import 'order_status.dart';
 
@@ -52,14 +50,12 @@ class OrderConfirmation extends StatelessWidget {
                     .then((value) => result = Map<String, dynamic>.from(value))
                     .whenComplete(() async {
                       if(result['success']){
-                        String token;
-                        await UserPreferences().getUser().then((user) => token = user.token);
-                        // String token = FetchShopItems.token;
+                        // String token;
+                        // await UserPreferences().getUser().then((user) => token = user.token);
+                        String token = FetchShopItems.token;
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => OrderStatus(token: token)
-                          // MaterialPageRoute(builder: (context) => Socket()
-                          // MaterialPageRoute(builder: (context) => Socket3(title: 'test title', channel: IOWebSocketChannel.connect('ws://echo.websocket.org'),)
                           )
                         );
                       } else {

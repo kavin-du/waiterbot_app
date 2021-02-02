@@ -8,7 +8,6 @@ import 'package:waiterbot_app/screens/enter_shopId.dart';
 import 'package:waiterbot_app/screens/qrscan.dart';
 import 'package:waiterbot_app/screens/sign_screen.dart';
 import 'package:waiterbot_app/screens/success_screen.dart';
-import 'discarded/signup.dart';
 import './screens/otp.dart';
 import './screens/image_slides.dart';
 import './screens/qrscan.dart';
@@ -27,7 +26,6 @@ import 'screens/notifications.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
-  // runApp(new SignScreen());
   runApp(MultiProvider(
     providers: [
         ChangeNotifierProvider(create: (context) => SignStateProvider()),
@@ -39,13 +37,13 @@ void main() {
 
       ],
       child: MaterialApp(
-      home: SignScreen(),
+      // home: SignScreen(),
       // home: ErrorScreen("hello error"),
-      // home: OTP(),
+      // * home: OTP(),
       // * home: ImageSlides(),  
-      // home: QRScan(), 
-      // home: EnterShopId(),   
-      // home: FoodList(),
+      // * home: QRScan(), 
+      // * home: EnterShopId(),   
+      home: FoodList(),
       routes: {
         '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),

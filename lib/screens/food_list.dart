@@ -24,7 +24,7 @@ class _FoodListState extends State<FoodList> {
         .fetchShopInfo(AppUrls.getShopId)
         .then((result) => result['data']);
   }
-  
+
   Future<List<FoodItem>> getShopFoods() async {
     return FetchShopItems().fetchFoods().then((Map<String, dynamic> value) {
       List<Map<String, dynamic>> data =
@@ -48,37 +48,36 @@ class _FoodListState extends State<FoodList> {
         Provider.of<FoodListProvider>(context);
 
     Widget shopInfo() {
-    return Container(
-      height: 200,
-      color: Colors.greenAccent,
-      child: Center(
-          child: FutureBuilder<Map<String, dynamic>>(
-        future: _getShopItems,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                SizedBox(height: 15),
-                CachedNetworkImage(
-                  height: 100,
-                  imageUrl: snapshot.data['imgUrl'],
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-                SizedBox(height: 15),
-                Text(snapshot.data['name']),
-                Text(snapshot.data['address']),
-              ],
-            );
-          } else if (snapshot.hasError) {
-            return Text(snapshot.error);
-          }
-          return CircularProgressIndicator();
-        },
-      )),
-    );
-    
-  }
+      return Container(
+        height: 200,
+        color: Colors.greenAccent,
+        child: Center(
+            child: FutureBuilder<Map<String, dynamic>>(
+          future: _getShopItems,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: [
+                  SizedBox(height: 15),
+                  CachedNetworkImage(
+                    height: 100,
+                    imageUrl: snapshot.data['imgUrl'],
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
+                  SizedBox(height: 15),
+                  Text(snapshot.data['name']),
+                  Text(snapshot.data['address']),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error);
+            }
+            return CircularProgressIndicator();
+          },
+        )),
+      );
+    }
 
     Widget foodCards() {
       return FutureBuilder(
@@ -177,6 +176,4 @@ class _FoodListState extends State<FoodList> {
       ),
     );
   }
-
-  
 }

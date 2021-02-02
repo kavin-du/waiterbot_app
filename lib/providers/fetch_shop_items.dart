@@ -11,7 +11,7 @@ enum Status { Fetching, FetchComplete, FetchFailed }
 
 class FetchShopItems with ChangeNotifier {
   Status _fetchStatus = Status.Fetching;
-  // static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxMTg1MzU0NSwiZXhwIjoxNjEyNDU4MzQ1fQ.TsuPA7YzfU9Xn81OmjZp3RWCY-x5yjvccNS7e-H41Cc";
+  static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxMjI2MjE5NiwiZXhwIjoxNjEyODY2OTk2fQ.GkanXa-ZsjWFH7e49_uWA1NC8i8qCHt2XeaQIo99PcY";
 
   Status get fetchStatus => _fetchStatus;
   
@@ -20,8 +20,8 @@ class FetchShopItems with ChangeNotifier {
     _fetchStatus = Status.Fetching;
 
     Map<String, dynamic> result;
-    String token;
-    await UserPreferences().getUser().then((user) => token = user.token);
+    // String token;
+    // await UserPreferences().getUser().then((user) => token = user.token);
 
     Response response = await get(
       AppUrls.shopInfoUrl,
@@ -55,10 +55,10 @@ class FetchShopItems with ChangeNotifier {
   Future<Map<String, dynamic>> fetchFoods() async {
     _fetchStatus = Status.Fetching;
     var result;
-    String token;
+    // String token;
 
     // TODO: error handling for token cactch
-    await UserPreferences().getUser().then((user) => token = user.token);
+    // await UserPreferences().getUser().then((user) => token = user.token);
     Response response = await get(
       AppUrls.foodItemsUrl,
       headers: {
@@ -89,9 +89,9 @@ class FetchShopItems with ChangeNotifier {
   Future<Map<String, dynamic>> fetchReviews(String foodId) async {
     Map<String, dynamic> result;
 
-    String token;
+    // String token;
     
-    await UserPreferences().getUser().then((user) => token = user.token);
+    // await UserPreferences().getUser().then((user) => token = user.token);
     
     AppUrls.setFoodId = foodId;
 
@@ -119,9 +119,9 @@ class FetchShopItems with ChangeNotifier {
 
   Future<Map<String, dynamic>> addReview(String foodId, String review, int stars) async {
     Map<String, dynamic> result;
-    String token;
+    // String token;
 
-    await UserPreferences().getUser().then((user) => token = user.token);
+    // await UserPreferences().getUser().then((user) => token = user.token);
 
     AppUrls.setFoodId = foodId;
     Response response = await post(
@@ -150,9 +150,9 @@ class FetchShopItems with ChangeNotifier {
 
   Future<Map<String, dynamic>> placeOrder(List<FoodItem> items, double total) async {
     Map<String, dynamic> result;
-    String token;
+    // String token;
 
-    await UserPreferences().getUser().then((user) => token = user.token);
+    // await UserPreferences().getUser().then((user) => token = user.token);
 
     List<Map<String, dynamic>> orderItems = items
     .map((value) => {"item": value.foodId, "portion": value.portionId, "qty": value.units}).toList();
