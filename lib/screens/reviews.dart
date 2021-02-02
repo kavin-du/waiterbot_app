@@ -31,8 +31,8 @@ class _ReviewsState extends State<Reviews> {
   @override
   void dispose() {
     super.dispose();
-    // _textController.dispose();
-    // _formKey.currentState.dispose();
+    _textController?.dispose();
+    _formKey.currentState?.dispose();
   }
 
   @override
