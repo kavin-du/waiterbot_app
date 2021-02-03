@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -39,34 +40,50 @@ class AuthProvider with ChangeNotifier {
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
-    Response response = await post(AppUrls.login,
+    try {
+      Response response = await post(AppUrls.login,
         body: json.encode(loginData),
-        headers: {'Content-type': 'application/json'});
+        headers: {'Content-type': 'application/json'}).timeout(Duration(seconds: 4));
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
 
-      var userData = responseData; // ?
+        var userData = responseData; // ?
 
-      User authUser = User.fromJson(userData);
+        User authUser = User.fromJson(userData);
 
-      UserPreferences().saveUser(authUser);
+        UserPreferences().saveUser(authUser);
 
-      _loggedInStatus = Status.LoggedIn;
-      notifyListeners();
-      notificationProvider.connectToSocket(userData['token']);
-      print(userData['token'].toString());
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
-      
-    } else {
+        _loggedInStatus = Status.LoggedIn;
+        notifyListeners();
+        notificationProvider.connectToSocket(userData['token']);
+        print(userData['token'].toString());
+        result = {'success': true, 'message': 'Successful'};
+        
+      } else {
+        _loggedInStatus = Status.NotLoggedIn;
+        notifyListeners();
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message'],
+        };
+      }
+    } on TimeoutException catch(e){
       _loggedInStatus = Status.NotLoggedIn;
-      notifyListeners();
-
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['message'],
-      };
+        notifyListeners();
+        result = {
+          'success': false,
+          'message':'Connection failed. Check your connection.',
+        };
+    } on Exception catch(e){
+      _loggedInStatus = Status.NotLoggedIn;
+        notifyListeners();
+        result = {
+          'success': false,
+          'message': e.toString(),
+        };
     }
+    
 
     return result;
   }
@@ -84,37 +101,55 @@ class AuthProvider with ChangeNotifier {
 
     _registeredStatus = Status.Authenticating;
     notifyListeners();
-
-    Response response = await post(AppUrls.register,
+    
+    try {
+      Response response = await post(AppUrls.register,
         body: json.encode(registerData),
-        headers: {'Content-type': 'application/json'});
+        headers: {'Content-type': 'application/json'}).timeout(Duration(seconds: 4));
 
-    if (response.statusCode == 201) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (response.statusCode == 201) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
 
-      var userData = responseData;
+        var userData = responseData;
 
-      User authUser = User.fromJson(userData);
+        User authUser = User.fromJson(userData);
 
-      UserPreferences().saveUser(authUser);
+        UserPreferences().saveUser(authUser);
 
-      _registeredStatus = Status.Registered;
-      notifyListeners();
+        _registeredStatus = Status.Registered;
+        notifyListeners();
 
-      result = {
-        'status': true,
-        'message': 'Register Successful',
-        'user': authUser
-      };
-    } else {
+        result = {
+          'success': true,
+          'message': 'Register Successful',
+        };
+      } else {
+        _registeredStatus = Status.NotRegistered;
+        notifyListeners();
+
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message']
+        };
+      }
+    } on TimeoutException catch(e) {
       _registeredStatus = Status.NotRegistered;
       notifyListeners();
 
       result = {
-        'status': false,
-        'message': json.decode(response.body)['message']
+        'success': false,
+        'message': 'Connection failed. Check your connection.'
+      };
+    } on Exception catch(e){
+      _registeredStatus = Status.NotRegistered;
+      notifyListeners();
+
+      result = {
+        'success': false,
+        'message': e.toString(),
       };
     }
+    
     return result;
   }
 }

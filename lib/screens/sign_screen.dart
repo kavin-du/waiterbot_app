@@ -41,17 +41,13 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
           .login(context, _mobileNumber, _password);
 
         successfulMessage.then((response) {
-          if(response['status']){
-            User user = response['user'];
-
-            // Provider.of<UserProvider>(context, listen=false).setUser(user);
+          if(response['success']){
             Navigator.pushReplacementNamed(context, '/enterShopId');
           } else {
-            // print(response);
             Flushbar(
               title:'Login Failed',
               message: response['message'],
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ).show(context);
           }
         });
@@ -66,30 +62,24 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
       if(_formKeySignUp.currentState.validate() && Provider.of<SignStateProvider>(context, listen:false).checkBoxValue){
         _formKeySignUp.currentState.save();
 
-        // check this....................listern false
         final Future<Map<String, dynamic>> successfulMessage = Provider.of<AuthProvider>(context, listen: false)
           .register(_firstName, _lastName, _mobileNumber, _password);
 
         successfulMessage.then((response) {
-          if(response['status']){
-            User user = response['user'];
-
-            // Provider.of<UserProvider>(context, listen=false).setUser(user);
-
+          if(response['success']){
             Provider.of<SignStateProvider>(context, listen: false).signInScreen();
             Navigator.pushReplacementNamed(context, '/imageSlides');
             Flushbar(
               title:'Please LogIn.',
               message: response['message'],
-              duration: Duration(seconds: 5),
+              duration: Duration(seconds: 4),
             ).show(context);
 
           } else {
-            // print(response);
             Flushbar(
               title:'Registering Failed',
               message: response['message'],
-              duration: Duration(seconds: 3),
+              duration: Duration(seconds: 5),
             ).show(context);
           }
         });
@@ -209,14 +199,12 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
         onSaved: (String value) {
           // invoke onSaved when formKey.currentState.Saved() calls
           _password = value;
-          // print(value);
         },
       ),
     );
   }
 
   Widget regPassword() {
-
     return Column(
       children: [
         Padding(
@@ -235,15 +223,12 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
                 labelStyle: TextStyle(
                     fontWeight: FontWeight.w500, color: Colors.black, fontSize: 22)),
             validator: (String value){
-              print(_confirmPassController.text);
-              print(value);
               if(_confirmPassController.text == value) return passwordValidation(value);
               return 'Passwords do not match';
             },
             onSaved: (String value) {
               // invoke onSaved when formKey.currentState.Saved() calls
               _password = value;
-              // print(value);
             },
           ),
         ),

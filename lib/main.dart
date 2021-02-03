@@ -37,13 +37,13 @@ void main() {
 
       ],
       child: MaterialApp(
-      // home: SignScreen(),
+      home: SignScreen(),
       // home: ErrorScreen("hello error"),
       // * home: OTP(),
       // * home: ImageSlides(),  
       // * home: QRScan(), 
       // * home: EnterShopId(),   
-      home: FoodList(),
+      // home: FoodList(),
       routes: {
         '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),
