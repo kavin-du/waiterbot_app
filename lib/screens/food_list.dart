@@ -18,20 +18,21 @@ class FoodList extends StatefulWidget {
 class _FoodListState extends State<FoodList> {
   String _pressedButton = '';
   Future<Map<String, dynamic>> _getShopItems;
-  Future<List<FoodItem>> _getShopFoods;
+  Future<Map<String, dynamic>> _getShopFoods;
 
   Future<Map<String, dynamic>> getShopItems() async {
     return await FetchShopItems().fetchShopInfo();
   }
 
-  Future<List<FoodItem>> getShopFoods() async {
-    return FetchShopItems().fetchFoods().then((Map<String, dynamic> value) {
-      List<Map<String, dynamic>> data =
-          List<Map<String, dynamic>>.from(value['data']);
-      List<FoodItem> foodItems =
-          data.map<FoodItem>((item) => FoodItem.fromJson(item)).toList();
-      return foodItems;
-    });
+  Future<Map<String, dynamic>> getShopFoods() async {
+    return await FetchShopItems().fetchFoods();
+    // return FetchShopItems().fetchFoods().then((Map<String, dynamic> value) {
+    //   List<Map<String, dynamic>> data =
+    //       List<Map<String, dynamic>>.from(value['data']);
+    //   List<FoodItem> foodItems =
+    //       data.map<FoodItem>((item) => FoodItem.fromJson(item)).toList();
+    //   return foodItems;
+    // });
   }
 
   @override
@@ -83,34 +84,42 @@ class _FoodListState extends State<FoodList> {
       );
     }
 
-    Widget foodCards() {
+    Widget foodCards() { // ! do not return text widget, this is a list view
       return FutureBuilder(
         future: _getShopFoods,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (_foodListProvider.getFoodType == 'All') {
+            if(snapshot.data['success']){
+              List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(snapshot.data['data']);
+              List<FoodItem> foodItems = data.map<FoodItem>((item) => FoodItem.fromJson(item)).toList();
+
+              if (_foodListProvider.getFoodType == 'All') {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: foodItems.length,
+                    itemBuilder: (context, index) {
+                      return FoodCard(foodItem: foodItems[index]);
+                    },
+                  ),
+                );
+              }
               return Expanded(
                 child: ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: foodItems.length,
                   itemBuilder: (context, index) {
-                    return FoodCard(foodItem: snapshot.data[index]);
+                    return foodItems[index].category ==
+                            _foodListProvider.getFoodType
+                        ? FoodCard(foodItem: foodItems[index])
+                        : Container();
                   },
                 ),
               );
+            } else {
+              return CircularProgressIndicator(); // otherwise all errors are text widgets
+              // return Text(snapshot.data['message'].toString());
             }
-            return Expanded(
-              child: ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return snapshot.data[index].category ==
-                          _foodListProvider.getFoodType
-                      ? FoodCard(foodItem: snapshot.data[index])
-                      : Container();
-                },
-              ),
-            );
+            
           } else if (snapshot.hasError) {
-            print(snapshot.error.toString());
             return Text(snapshot.error.toString());
           }
           return CircularProgressIndicator();
@@ -119,36 +128,44 @@ class _FoodListState extends State<FoodList> {
     }
 
     Widget buttonBar() {
-      return FutureBuilder<List<FoodItem>>(
+      return FutureBuilder(
         future: _getShopFoods,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<String> categories = ['All'] +
-                snapshot.data.map((item) => item.category).toSet().toList();
-            return Container(
-              padding: const EdgeInsets.only(top: 10, bottom: 5),
-              height: 50,
-              child: ListView.builder(
-                  itemCount: categories.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return FlatButton(
-                      child: Text(categories[index]),
-                      color: categories[index] == _pressedButton
-                          ? Colors.green
-                          : null,
-                      onPressed: () {
-                        _foodListProvider.setFoodType = categories[index];
-                        setState(() {
-                          _pressedButton = categories[index];
-                        });
-                      },
-                    );
-                  }),
-            );
+            if(snapshot.data['success']){              
+              List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(snapshot.data['data']);
+              List<FoodItem> foodItems = data.map<FoodItem>((item) => FoodItem.fromJson(item)).toList();
+
+              List<String> categories = ['All'] +
+                foodItems.map((item) => item.category).toSet().toList();
+              return Container(
+                padding: const EdgeInsets.only(top: 10, bottom: 5),
+                height: 50,
+                child: ListView.builder(
+                    itemCount: categories.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return FlatButton(
+                        child: Text(categories[index]),
+                        color: categories[index] == _pressedButton
+                            ? Colors.green
+                            : null,
+                        onPressed: () {
+                          _foodListProvider.setFoodType = categories[index];
+                          setState(() {
+                            _pressedButton = categories[index];
+                          });
+                        },
+                      );
+                    }),
+              );
+            } else {
+              return Container(height: 20);
+              // return CircularProgressIndicator(); // otherwise all errors are text widgets
+              // return Text(snapshot.data['message'].toString());
+            }
           } else if (snapshot.hasError) {
-            print(snapshot.error.toString());
             return Text(snapshot.error.toString());
           }
           return CircularProgressIndicator();

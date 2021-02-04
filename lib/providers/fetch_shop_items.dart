@@ -62,9 +62,6 @@ class FetchShopItems with ChangeNotifier {
     return result;
   }
 
-
-
-
   Future<Map<String, dynamic>> fetchFoods() async {
     _fetchStatus = Status.Fetching;
     var result;
@@ -72,29 +69,44 @@ class FetchShopItems with ChangeNotifier {
 
     // TODO: error handling for token cactch
     // await UserPreferences().getUser().then((user) => token = user.token);
-    Response response = await get(
-      AppUrls.foodItemsUrl,
-      headers: {
-        "Authorization": "Bearer $token"
+
+    try{
+      Response response = await get(
+        AppUrls.foodItemsUrl,
+        headers: {
+          "Authorization": "Bearer $token"
+        }
+      ).timeout(Duration(seconds: 5));
+
+      if(response.statusCode == 200 || response.statusCode == 201){
+        final Map<String, dynamic> responseData = json.decode(response.body) as Map<String, dynamic>;
+
+        _fetchStatus = Status.FetchComplete;
+        notifyListeners();
+
+        result = responseData;
+      } else {
+        _fetchStatus = Status.FetchFailed;
+        notifyListeners();
+
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message']
+        };
       }
-    );
-
-    if(response.statusCode == 200 || response.statusCode == 201){
-      final Map<String, dynamic> responseData = json.decode(response.body) as Map<String, dynamic>;
-
-      _fetchStatus = Status.FetchComplete;
-      notifyListeners();
-
-      result = responseData;
-    } else {
-      _fetchStatus = Status.FetchFailed;
-      notifyListeners();
-
+    } on TimeoutException catch(e){
       result = {
         'success': false,
-        'message': json.decode(response.body)['message']
+        'message': 'Connection failed. Check your connection'
+      };
+
+    } on Exception catch(e){
+      result = {
+        'success': false,
+        'message': e.toString(),
       };
     }
+    
     return result;
 
   }
