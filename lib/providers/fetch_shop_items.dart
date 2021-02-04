@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -16,36 +17,48 @@ class FetchShopItems with ChangeNotifier {
   Status get fetchStatus => _fetchStatus;
   
   // TODO: no need to pass store id
-  Future<Map<String, dynamic>> fetchShopInfo(String storeId) async {
+  Future<Map<String, dynamic>> fetchShopInfo() async {
     _fetchStatus = Status.Fetching;
 
     Map<String, dynamic> result;
     // String token;
     // await UserPreferences().getUser().then((user) => token = user.token);
 
-    Response response = await get(
-      AppUrls.shopInfoUrl,
-      headers: {
-        "Authorization" : "Bearer $token"
-      }
-    );
+    try{
+      Response response = await get(
+        AppUrls.shopInfoUrl,
+        headers: {
+          "Authorization" : "Bearer $token"
+        }
+      ).timeout(Duration(seconds: 5));
 
-    if(response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      if(response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        
+        _fetchStatus = Status.FetchComplete;
+        notifyListeners();
+        return responseData;
       
-      _fetchStatus = Status.FetchComplete;
-      notifyListeners();
-      return responseData;
-    
-    } else {
-      _fetchStatus = Status.FetchFailed;
-      notifyListeners();
+      } else {
+        _fetchStatus = Status.FetchFailed;
+        notifyListeners();
 
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message']
+        };
+      }
+    } on TimeoutException catch(e){
       result = {
         'success': false,
-        'message': json.decode(response.body)['message']
+        'message': 'Connection failed. Check your connection.'
       };
-    }
+    } on Exception catch(e) {
+      result = {
+        'success': false,
+        'message': e.toString(),
+      };
+    }    
     return result;
   }
 

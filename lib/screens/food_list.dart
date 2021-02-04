@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/custom_appbar.dart';
@@ -20,9 +21,7 @@ class _FoodListState extends State<FoodList> {
   Future<List<FoodItem>> _getShopFoods;
 
   Future<Map<String, dynamic>> getShopItems() async {
-    return FetchShopItems()
-        .fetchShopInfo(AppUrls.getShopId)
-        .then((result) => result['data']);
+    return await FetchShopItems().fetchShopInfo();
   }
 
   Future<List<FoodItem>> getShopFoods() async {
@@ -56,22 +55,27 @@ class _FoodListState extends State<FoodList> {
           future: _getShopItems,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Column(
-                children: [
-                  SizedBox(height: 15),
-                  CachedNetworkImage(
-                    height: 100,
-                    imageUrl: snapshot.data['imgUrl'],
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                  SizedBox(height: 15),
-                  Text(snapshot.data['name']),
-                  Text(snapshot.data['address']),
-                ],
-              );
+              if(snapshot.data['success']){
+                Map<String, dynamic> data = Map<String, dynamic>.from(snapshot.data['data']);
+                return Column(
+                  children: [
+                    SizedBox(height: 15),
+                    CachedNetworkImage(
+                      height: 100,
+                      imageUrl: data['imgUrl'],
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                    SizedBox(height: 15),
+                    Text(data['name']),
+                    Text(data['address']),
+                  ],
+                );
+              } else {
+                return Text(snapshot.data['message'].toString());
+              }              
             } else if (snapshot.hasError) {
-              return Text(snapshot.error);
+              return Text(snapshot.error.toString());
             }
             return CircularProgressIndicator();
           },
