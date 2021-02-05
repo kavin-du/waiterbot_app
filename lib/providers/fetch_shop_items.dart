@@ -151,33 +151,48 @@ class FetchShopItems with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> addReview(String foodId, String review, int stars) async {
+    _fetchStatus = Status.Fetching;
     Map<String, dynamic> result;
     // String token;
 
     // await UserPreferences().getUser().then((user) => token = user.token);
 
     AppUrls.setFoodId = foodId;
-    Response response = await post(
-      AppUrls.reviewsUrl,
-      headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode({
-        "stars": stars,
-        "comment": review
-      })
-    );
-    
-    if(response.statusCode == 201){
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      result = responseData;
-    } else {
+
+    try {
+      Response response = await post(
+        AppUrls.reviewsUrl,
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json"
+        },
+        body: jsonEncode({
+          "stars": stars,
+          "comment": review
+        })
+      ).timeout(Duration(seconds: 4));
+      
+      if(response.statusCode == 201){
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        result = responseData;
+      } else {
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message']
+        };
+      }
+    } on TimeoutException catch(e) {
       result = {
         'success': false,
-        'message': Map<String, dynamic>.from(json.decode(response.body))['message']
+        'message': 'Connection failed. Check your connection.'
+      };
+    } on Exception catch(e){
+      result = {
+        'success': false,
+        'message': e.toString(),
       };
     }
+    _fetchStatus = Status.FetchComplete;
     return result;
   }
 

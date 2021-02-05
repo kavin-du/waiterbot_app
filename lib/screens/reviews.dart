@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 
@@ -67,13 +68,13 @@ class _ReviewsState extends State<Reviews> {
                     allowHalfRating: false,
                     itemCount: 5,
                     itemPadding: EdgeInsets.symmetric(horizontal: 3),
-                    itemBuilder: (context, _){
+                    itemBuilder: (context, _) {
                       return Icon(
                         Icons.star,
                         color: Colors.amber,
                       );
                     },
-                    onRatingUpdate: (rating){
+                    onRatingUpdate: (rating) {
                       _currentSliderValue = rating;
                     },
                   ),
@@ -83,6 +84,7 @@ class _ReviewsState extends State<Reviews> {
             ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
+                    CircularProgressIndicator();
                     Map<String, dynamic> result;
                     await _fetchShopItems
                         .addReview(
@@ -94,14 +96,13 @@ class _ReviewsState extends State<Reviews> {
                         .whenComplete(() {
                       setState(() {
                         Flushbar(
+                          showProgressIndicator: true,
                           duration: Duration(seconds: 4),
                           title: "Hi",
-                          message: Map<String, dynamic>.from(result)['message'],
+                          message: result['message'].toString(),
                         ).show(context);
                       });
                     });
-                  } else {
-                    print('error happened');
                   }
                   _textController.clear();
                 },
@@ -114,7 +115,8 @@ class _ReviewsState extends State<Reviews> {
     Widget showReviews() {
       return Container(
           child: FutureBuilder<Map<String, dynamic>>(
-        future: getReviews(), // * not putting a reference bcz need to refresh every time when adding a comment
+        future:
+            getReviews(), // * not putting a reference bcz need to refresh every time when adding a comment
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data['success']) {
