@@ -84,7 +84,7 @@ class _FoodListState extends State<FoodList> {
       );
     }
 
-    Widget foodCards() { // ! do not return text widget, this is a list view
+    Widget foodCards() { 
       return FutureBuilder(
         future: _getShopFoods,
         builder: (context, snapshot) {

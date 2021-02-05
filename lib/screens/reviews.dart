@@ -21,11 +21,7 @@ class _ReviewsState extends State<Reviews> {
   final _fetchShopItems = FetchShopItems();
 
   Future<Map<String, dynamic>> getReviews() async {
-    return await _fetchShopItems
-        .fetchReviews(widget.foodItem.foodId)
-        .then((value) {
-      return value;
-    });
+    return await _fetchShopItems.fetchReviews(widget.foodItem.foodId);
   }
 
   @override
@@ -143,7 +139,7 @@ class _ReviewsState extends State<Reviews> {
                 ),
               );
             } else {
-              return Text(snapshot.data['message']);
+              return Text(snapshot.data['message'].toString());
             }
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());

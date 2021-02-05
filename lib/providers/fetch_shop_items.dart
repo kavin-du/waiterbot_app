@@ -16,7 +16,6 @@ class FetchShopItems with ChangeNotifier {
 
   Status get fetchStatus => _fetchStatus;
   
-  // TODO: no need to pass store id
   Future<Map<String, dynamic>> fetchShopInfo() async {
     _fetchStatus = Status.Fetching;
 
@@ -120,25 +119,34 @@ class FetchShopItems with ChangeNotifier {
     
     AppUrls.setFoodId = foodId;
 
-    Response response = await get(
-      AppUrls.reviewsUrl,
-      headers: {
-        "Authorization": "Bearer $token"
+    try {
+      Response response = await get(
+        AppUrls.reviewsUrl,
+        headers: {
+          "Authorization": "Bearer $token"
+        }
+      ).timeout(Duration(seconds: 4));
+
+      if(response.statusCode == 200){
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        result = responseData;
+      } else {
+        result = {
+          'success': false,
+          'message': json.decode(response.body)['message']
+        };
       }
-    );
-    if(response.statusCode == 200){
-      // ? this was as map in above function
-      final Map<String, dynamic> responseData = json.decode(response.body);
-
-      result = responseData;
-
-    } else {
+    } on TimeoutException catch(e) {
       result = {
         'success': false,
-        'message': json.decode(response.body)['message']
+        'message': 'Connection failed. Check your connection.'
+      };
+    } on Exception catch(e) {
+      result = {
+        'success': false,
+        'message': e.toString(),
       };
     }
-    // print(result); 
     return result;
   }
 
