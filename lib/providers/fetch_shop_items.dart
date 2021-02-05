@@ -8,7 +8,7 @@ import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/services/app_urls.dart';
 import 'package:waiterbot_app/services/shared_preferences.dart';
 
-enum Status { Fetching, FetchComplete, FetchFailed }
+enum Status { Fetching, FetchComplete, FetchFailed } // ! check sign in enum for more customization
 
 class FetchShopItems with ChangeNotifier {
   Status _fetchStatus = Status.Fetching;
@@ -213,23 +213,35 @@ class FetchShopItems with ChangeNotifier {
       "items": orderItems,
     };
 
-    Response response = await post(
-      AppUrls.placeOrder,
-      headers: {
-        "Authorization": "Bearer $token", 
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(jsonBody)
-    );
+    try {
+      Response response = await post(
+        AppUrls.placeOrder,
+        headers: {
+          "Authorization": "Bearer $token", 
+          "Content-Type": "application/json"
+        },
+        body: jsonEncode(jsonBody)
+      ).timeout(Duration(seconds: 5));
 
-    if(response.statusCode == 200 || response.statusCode == 201){
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      if(response.statusCode == 200 || response.statusCode == 201){
+        final Map<String, dynamic> responseData = json.decode(response.body);
 
-      result = responseData;
-    } else {
+        result = responseData;
+      } else {
+        result = {
+          "success": false,
+          "message": json.decode(response.body)['message']
+        };
+      }
+    } on TimeoutException catch(e) {
       result = {
         "success": false,
-        "message": json.decode(response.body)['message']
+        "message":'Connection error. Check your connection'
+      };
+    } on Exception catch(e) {
+      result = {
+        "success": false,
+        "message": e.toString(),
       };
     }
     return result;

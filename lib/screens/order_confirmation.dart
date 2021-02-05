@@ -60,7 +60,7 @@ class OrderConfirmation extends StatelessWidget {
                         );
                       } else {
                         Flushbar(
-                          duration: Duration(seconds: 4),
+                          duration: Duration(seconds: 5),
                           title:"Hi",
                           message: Map<String, dynamic>.from(result)['message'],
                         ).show(context);
