@@ -20,6 +20,7 @@ class RatingStars extends StatelessWidget {
           Navigator.push(context, MaterialPageRoute(builder: (context) => Reviews(foodItem: foodItem)));
         },
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(5, (index) {
             return Icon(index < value ? Icons.star : Icons.star_outline);
           }),

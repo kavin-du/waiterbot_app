@@ -11,6 +11,7 @@ import 'package:waiterbot_app/screens/success_screen.dart';
 import './screens/otp.dart';
 import './screens/image_slides.dart';
 import './screens/qrscan.dart';
+import 'discarded/temp.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notification_provider.dart';
 import 'providers/sign_state_provider.dart';
@@ -40,10 +41,11 @@ void main() {
       // home: SignScreen(),
       // home: ErrorScreen("hello error"),
       // * home: OTP(),
-      // * home: ImageSlides(),  
+      // home: ImageSlides(),  
       // * home: QRScan(), 
       // * home: EnterShopId(),   
       home: FoodList(),
+      // home: Temp(),
       routes: {
         '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),

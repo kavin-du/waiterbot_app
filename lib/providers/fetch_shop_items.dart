@@ -12,7 +12,7 @@ enum Status { Fetching, FetchComplete, FetchFailed } // ! check sign in enum for
 
 class FetchShopItems with ChangeNotifier {
   Status _fetchStatus = Status.Fetching;
-  static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxMjI2MjE5NiwiZXhwIjoxNjEyODY2OTk2fQ.GkanXa-ZsjWFH7e49_uWA1NC8i8qCHt2XeaQIo99PcY";
+  static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxNDM1MDg3OSwiZXhwIjoxNjE0OTU1Njc5fQ.o4nx68aE0GXg_snL7UGXk_68-EHBP-qCog0dPT0x_Gw";
 
   Status get fetchStatus => _fetchStatus;
   
