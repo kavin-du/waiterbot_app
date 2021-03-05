@@ -22,7 +22,7 @@ class RatingStars extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(5, (index) {
-            return Icon(index < value ? Icons.star : Icons.star_outline);
+            return Icon(index < value ? Icons.star : Icons.star_outline, color: Colors.yellow);
           }),
         ),
       ),

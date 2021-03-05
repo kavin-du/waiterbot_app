@@ -17,6 +17,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     var _notificationProvider = Provider.of<NotificationProvider>(context);
     return AppBar(
+      backgroundColor: Colors.blue[300],
       centerTitle: true,
       title: Text(title),
       actions: <Widget>[

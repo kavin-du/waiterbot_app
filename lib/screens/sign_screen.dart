@@ -405,8 +405,5 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
       },
     );
   }
-
-  
-
   
 }
