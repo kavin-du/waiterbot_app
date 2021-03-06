@@ -144,7 +144,7 @@ class _FoodListState extends State<FoodList> {
               return Container(
                 padding: EdgeInsets.only(left: _height * 0.678/100, right: _height * 0.678/100), // 5
                 color: Colors.transparent,
-                height: _height * 18 / 100, 
+                height: _height * 18 / 100, // 18%
                 child: ListView.builder(
                   itemCount: _categories.length,
                   shrinkWrap: false,
@@ -180,7 +180,7 @@ class _FoodListState extends State<FoodList> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Image.asset(_categoryIcons[index]),
+                            Image.asset(_categoryIcons[index], height: _height * 0.10848,), // 80
                             Text(
                               _categories[index],
                               style: TextStyle(
@@ -215,8 +215,8 @@ class _FoodListState extends State<FoodList> {
 
       List<FoodItem> _foodItems = _foodListProvider.getFoodList(_category);
       return Container(
-        width: _width * 60 / 100,
         height: _height * 45.5 / 100,
+        width: _width * 60 / 100,
         child: CarouselSlider.builder(
           unlimitedMode: true,
           controller: _sliderController,
@@ -225,7 +225,8 @@ class _FoodListState extends State<FoodList> {
           },
           slideTransform: DefaultTransform(),
           slideIndicator: CircularStaticIndicator(
-            padding: EdgeInsets.only(bottom: _height * 2.712/100), // 20
+            indicatorRadius: _height * 0.008136, // 6
+            padding: EdgeInsets.only(bottom: _height * 2.15/100), // 20
             enableAnimation: true,
             currentIndicatorColor: Colors.white,
             // indicatorBackgroundColor: Colors.grey,

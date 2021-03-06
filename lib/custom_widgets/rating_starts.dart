@@ -10,6 +10,7 @@ class RatingStars extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
     int value = foodItem.stars == 0 ? 0 : (foodItem.stars/foodItem.reviewCount).round();
 
     return Material(
@@ -22,7 +23,7 @@ class RatingStars extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(5, (index) {
-            return Icon(index < value ? Icons.star : Icons.star_outline, color: Colors.yellow);
+            return Icon(index < value ? Icons.star : Icons.star_outline, color: Colors.yellow, size: _height * 0.03254,); // 24
           }),
         ),
       ),

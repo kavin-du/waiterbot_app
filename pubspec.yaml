@@ -43,12 +43,18 @@ dependencies:
   flare_flutter: ^1.8.3
   rive: 
   loading_animations: "^2.1.0"
-  flutter_carousel_slider: ^1.0.6
+  flutter_carousel_slider: ^1.0.6  
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons: 
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/floating-button.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -22,7 +22,7 @@ class _FoodCardState extends State<FoodCard> {
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
-    // final _width = MediaQuery.of(context).size.width;
+    final _width = MediaQuery.of(context).size.width;
 
     final finalOrdersProvider = Provider.of<FinalOrdersProvider>(context);
     return Container(
@@ -32,7 +32,7 @@ class _FoodCardState extends State<FoodCard> {
           Positioned(
             top: _height * 0.089497, // 66
             child: Container(
-              height: _height * 0.339004, // 250, width controlled by parent widget // ! make this relative height
+              height: _height * 0.349004, // 250, width controlled by parent widget 
               decoration: BoxDecoration(
                 color: Constants.kPrimaryColor,
                 borderRadius: BorderRadius.circular(13),
@@ -44,8 +44,8 @@ class _FoodCardState extends State<FoodCard> {
                   ),
                 ]
               ),
-              margin: EdgeInsets.all(3),
-              padding: EdgeInsets.all(15),
+              margin: EdgeInsets.all(_height * 0.004068), // 3
+              padding: EdgeInsets.all(_height * 0.02034), // 15
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -78,11 +78,12 @@ class _FoodCardState extends State<FoodCard> {
                         children: [
                           // portion count
                           Container(
-                            width: 125,
-                            margin: EdgeInsets.all(2.5),
+                            height: _height * 0.05424, // 40
+                            width: _width * 0.318287, // 125
+                            margin: EdgeInsets.all(_height * 0.00339), // 2.5
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(color: Colors.white, width: _height * 0.002712), // 2
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -91,12 +92,12 @@ class _FoodCardState extends State<FoodCard> {
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   padding: const EdgeInsets.all(0),
-                                  minWidth: 20,
+                                  minWidth: _width * 0.050925, // 20
                                   child: Text(
                                     '-',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 25,
+                                        fontSize: _height * 0.0339, // 25
                                         color: Colors.white),
                                   ),
                                   onPressed: () {
@@ -106,7 +107,7 @@ class _FoodCardState extends State<FoodCard> {
                                   },
                                 ),
                                 Container(
-                                  width: 65,
+                                  width: _width * 0.165509, // 65
                                   child: Center(
                                     child: Text(
                                       _count.toString(),
@@ -120,15 +121,14 @@ class _FoodCardState extends State<FoodCard> {
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   padding: const EdgeInsets.all(0),
-                                  // color: Colors.blue[600],
-                                  // shape: CircleBorder(side: BorderSide()),
-                                  minWidth: 20,
+                                  minWidth: _width * 0.050925, // 20
                                   child: Text(
                                     '+',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                        color: Colors.white),
+                                        fontSize: _height * 0.02712, // 20
+                                        color: Colors.white,
+                                    ),
                                   ),
                                   onPressed: () {
                                     setState(() {
@@ -141,11 +141,12 @@ class _FoodCardState extends State<FoodCard> {
                           ),
                           // portion type
                           Container(
-                            margin: EdgeInsets.all(2.5),
-                            width: 125,
+                            margin: EdgeInsets.all(_height * 0.00339), // 2.5
+                            height: _height * 0.05424, // 40
+                            width: _width * 0.318287, // 125
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.white, width: 2),
+                              border: Border.all(color: Colors.white, width: _height * 0.002712), // 2
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -154,13 +155,14 @@ class _FoodCardState extends State<FoodCard> {
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   padding: const EdgeInsets.all(0),
-                                  minWidth: 20,
+                                  minWidth: _width * 0.050925, // 20
                                   child: Text(
                                     '-',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 25,
-                                        color: Colors.white),
+                                        fontSize: _height * 0.0339, // 25
+                                        color: Colors.white,
+                                    ),
                                   ),
                                   onPressed: () {
                                     if (_portionIndex > 0) {
@@ -171,7 +173,7 @@ class _FoodCardState extends State<FoodCard> {
                                   },
                                 ),
                                 Container(
-                                  width: 65,
+                                  width: _width * 0.165509, // 65
                                   child: Center(
                                     child: Text(
                                       widget.foodItem
@@ -187,12 +189,12 @@ class _FoodCardState extends State<FoodCard> {
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                   padding: const EdgeInsets.all(0),
-                                  minWidth: 20,
+                                  minWidth: _width * 0.050925, // 20
                                   child: Text(
                                     '+',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: _height * 0.02712, // 20
                                         color: Colors.white),
                                   ),
                                   onPressed: () {
@@ -212,18 +214,21 @@ class _FoodCardState extends State<FoodCard> {
                     ],
                   ),
                   FlatButton(
-                      child: Text('ADD TO LIST', style: TextStyle(color: Constants.kPrimaryColor)),
-                      onPressed: () {
-                        FoodItem newfooditem = FoodItem.forFinalOrder(
-                            widget.foodItem,
-                            _count,
-                            widget.foodItem.portions[_portionIndex]['name']);
-                        finalOrdersProvider.addOrder(newfooditem);
-                      },
-                      highlightColor: Colors.red,
-                      color: Colors.yellow,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(35))),
+                    height: _height * 0.04881, // 36
+                    child: Text('ADD TO LIST', style: TextStyle(color: Constants.kPrimaryColor,)),
+                    onPressed: () {
+                      FoodItem newfooditem = FoodItem.forFinalOrder(
+                          widget.foodItem,
+                          _count,
+                          widget.foodItem.portions[_portionIndex]['name']);
+                      finalOrdersProvider.addOrder(newfooditem);
+                    },
+                    highlightColor: Colors.red,
+                    color: Colors.yellow,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(35),
+                    ),
+                  ),
                 ],
               ),
             ),
