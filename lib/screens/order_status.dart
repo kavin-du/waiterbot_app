@@ -1,9 +1,10 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/providers/notification_provider.dart';
 
 class OrderStatus extends StatefulWidget {
-  final String token;
+  final String token; // ! token is not used anywhere
 
   const OrderStatus({Key key, this.token}) : super(key: key);
 
@@ -12,40 +13,61 @@ class OrderStatus extends StatefulWidget {
 }
 
 class _OrderStatusState extends State<OrderStatus> { 
+  final Map<String, FlareActor> _animations = {
+    'Pending': FlareActor("animations/Liquid_Loader.flr", animation: "Untitled"), 
+    'Preparing': FlareActor("animations/Sushi.flr", animation: "Sushi Bounce"),  
+    'Delivering': FlareActor("animations/Robot.flr", animation: "reposo"),  
+    'Delivered': FlareActor("animations/success_check.flr", animation: "Untitled"),  
+    'Cancelled':FlareActor("animations/cancel_button.flr", animation: "Error"),  
+  }; 
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     NotificationProvider _notificationProvider = Provider.of<NotificationProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your order placed successfully'),
+        title: Text('Your Order has been Placed.'),
       ),
+      backgroundColor: Colors.amber[300],
       body: Container(
-        height: _height,
+        height: _height, // WTF? 
         child: Column(
           children: [
             Container(
-              height: 50,
+              height: 60,
               alignment: Alignment.center,
-              padding: EdgeInsets.all(5),
-              child: CircularProgressIndicator(),
-            ),
-            Container(
-              height: 400,
-              child: ListView.builder(
-                itemCount: _notificationProvider.orderStatus.length,
-                itemBuilder: (context, index){
-                  return Container(
-                    height: 60,
-                    padding: const EdgeInsets.all(6.0),
-                    child: ListTile(
-                      title: Text(_notificationProvider.orderStatus[index].toString()),
-                      tileColor: Colors.purpleAccent,
-                    ),
-                  );
-                },
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(width: 10),
+                  Text(_notificationProvider.orderStatus.length == 0 ? 'Please Wait..' : _notificationProvider.orderStatus[_notificationProvider.orderStatus.length - 1].toString(),),
+                ],
               ),
             ),
+            Container(
+              height: _height*0.5,
+              child: _notificationProvider.orderStatus.length == 0
+               ? _animations['Pending']
+               : _animations[_notificationProvider.orderStatus[_notificationProvider.orderStatus.length - 1]],
+            ),
+            // Container(
+            //   height: 400,
+            //   child: ListView.builder(
+            //     itemCount: _notificationProvider.orderStatus.length,
+            //     itemBuilder: (context, index){
+            //       return Container(
+            //         height: 60,
+            //         padding: const EdgeInsets.all(6.0),
+            //         child: ListTile(
+            //           title: Text(_notificationProvider.orderStatus[index].toString()),
+            //           tileColor: Colors.purpleAccent,
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

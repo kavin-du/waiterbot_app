@@ -5,6 +5,7 @@ import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
 import 'package:waiterbot_app/providers/foodlist_provider.dart';
 import 'package:waiterbot_app/screens/enter_shopId.dart';
+import 'package:waiterbot_app/screens/order_status.dart';
 import 'package:waiterbot_app/screens/qrscan.dart';
 import 'package:waiterbot_app/screens/sign_screen.dart';
 import 'package:waiterbot_app/screens/success_screen.dart';
@@ -38,13 +39,13 @@ void main() {
 
       ],
       child: MaterialApp(
-      // home: SignScreen(),
+      home: SignScreen(),
       // home: ErrorScreen("hello error"),
       // * home: OTP(),
       // home: ImageSlides(),  
       // * home: QRScan(), 
       // * home: EnterShopId(),   
-      home: FoodList(),
+      // home: FoodList(),
       // home: Temp(),
       routes: {
         '/enterShopId': (context) => EnterShopId(),

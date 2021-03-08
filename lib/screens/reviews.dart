@@ -1,9 +1,11 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/providers/fetch_shop_items.dart';
+import 'package:waiterbot_app/services/constants.dart';
 
 class Reviews extends StatefulWidget {
   final FoodItem foodItem;
@@ -130,12 +132,58 @@ class _ReviewsState extends State<Reviews> {
                   itemCount: reviews.length,
                   itemBuilder: (context, index) {
                     return Container(
+                      padding: EdgeInsets.fromLTRB(3, 1, 3, 1),
                       child: Card(
-                          color: Colors.blueAccent[100],
-                          child: Text(
-                            reviews[index]['comment'],
-                            textAlign: TextAlign.center,
-                          )),
+                        color: Constants.kPrimaryColor[300],
+                        elevation: 5,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                              reviews[index]['comment'],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'JosefinSlab',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.white,
+                                    blurRadius: 3,
+                                  ),
+                                ]
+                              ),
+                            ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 2.5, bottom: 5, right: 5),
+                              child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  color: Colors.yellow,
+                                ),
+                                Text(reviews[index]['stars'].toString()),
+                              ],
+                            ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(top: 2.5, bottom: 5, right: 5),
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                DateFormat('MMM d, yyyy h:mm a')
+                                    .format(DateTime.parse(
+                                        reviews[index]['updatedAt']))
+                                    .toString(),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -153,18 +201,44 @@ class _ReviewsState extends State<Reviews> {
 
     Widget ingredients() {
       return Container(
-        height: 100,
+        height: 150,
         color: Colors.greenAccent,
         alignment: Alignment.center,
-        child: Text(widget.foodItem.ingredients.length == 0
-            ? 'No ingredients yet'
-            : widget.foodItem.ingredients.toString()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Ingredients:',
+              style: TextStyle(
+                fontFamily: 'SquadaOne',
+                color: Colors.white,
+                fontSize: 20,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              widget.foodItem.ingredients.length == 0
+                  ? 'No ingredients yet'
+                  : widget.foodItem.ingredients.join('\n'),
+              style: TextStyle(
+                fontFamily: 'SquadaOne',
+                fontSize: 17,
+              ),
+            ),
+          ],
+        ),
       );
     }
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Ratings & Reviews'),
+          title: Text('Ratings, Reviews & Ingredients'),
         ),
         body: SafeArea(
           child: Column(

@@ -44,6 +44,7 @@ dependencies:
   rive: 
   loading_animations: "^2.1.0"
   flutter_carousel_slider: ^1.0.6  
+  intl: 
 
 
 dev_dependencies:
@@ -93,6 +94,11 @@ flutter:
     - images/food_categories/rice.png
     - animations/success_check.flr
     - animations/Loading_error_and_check.flr
+    - animations/juice063.riv
+    - animations/Liquid_Loader.flr
+    - animations/Robot.flr
+    - animations/Sushi.flr
+    - animations/cancel_button.flr
 
     
 
@@ -114,7 +120,13 @@ flutter:
     - family: YanoneKaffeesatz
       fonts:
         - asset: fonts/YanoneKaffeesatz-Regular.ttf
-  #   - family: Trajan Pro
+    - family: SquadaOne
+      fonts:
+        - asset: fonts/SquadaOne-Regular.ttf
+    - family: JosefinSlab
+      fonts:
+        - asset: fonts/JosefinSlab-Regular.ttf
+  #   - family: Trajan Pro   
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf

@@ -38,9 +38,10 @@ class OrderConfirmation extends StatelessWidget {
               _finalOrdersProvider.getTotal > 0 ? FlatButton(
                 padding: EdgeInsets.all(10),
                 color: Colors.pink,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 child: Text(
                   'CONFIRM & PAY',
-                  style: TextStyle(fontSize: 35, color: Colors.white),
+                  style: TextStyle(fontSize: 25, color: Colors.white),
                 ),
                 onPressed: () async {
                   // print(_finalOrdersProvider.getOrders.values.toList()[0].selectedPortion);
@@ -50,9 +51,9 @@ class OrderConfirmation extends StatelessWidget {
                     .then((value) => result = Map<String, dynamic>.from(value))
                     .whenComplete(() async {
                       if(result['success']){
-                        // String token;
-                        // await UserPreferences().getUser().then((user) => token = user.token);
-                        String token = FetchShopItems.token;
+                        String token;
+                        await UserPreferences().getUser().then((user) => token = user.token);
+                        // String token = FetchShopItems.token;
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => OrderStatus(token: token)

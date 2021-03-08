@@ -11,11 +11,17 @@ class PushNotifications{
   PushNotifications(){
     flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-      var initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+      // var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher'); // ! change the icons name ?
+      var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
     var initializationSettingsIOs = IOSInitializationSettings();
     var initSetttings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOs);
+
+    flutterLocalNotificationsPlugin.initialize(initSetttings);
+
+
+
+
 
     // flutterLocalNotificationsPlugin.initialize(initSetttings,
     //     onSelectNotification: onSelectNotification);
@@ -94,7 +100,7 @@ class NotificationProvider with ChangeNotifier {
       _notifiCount++;
       // _notifications.add("Your order is \n"+data.toString());
       _notifications.add("Your order is "+data['status'].toString());
-      _orderStatus.add("Your order is "+data['status'].toString());
+      _orderStatus.add(data['status'].toString());
       pushNotifications.showNotification("Your order is "+data['status'].toString());
       notifyListeners();
 
