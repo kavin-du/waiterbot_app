@@ -22,9 +22,13 @@ enum Status {
 class AuthProvider with ChangeNotifier {
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredStatus = Status.NotRegistered;
+  static bool _guestLogin = false;
 
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredStatus => _registeredStatus;
+
+  static bool get guestLogin => _guestLogin;
+  static set setGuest(bool val) => _guestLogin = val;
   
   NotificationProvider notificationProvider;
 

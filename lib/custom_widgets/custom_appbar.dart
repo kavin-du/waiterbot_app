@@ -15,11 +15,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
     var _notificationProvider = Provider.of<NotificationProvider>(context);
+    
     return AppBar(
       backgroundColor: Colors.blue[300],
       centerTitle: true,
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: _height * 0.02712,
+        ),
+      ),
       actions: <Widget>[
         IconButton(
           icon: new Stack(

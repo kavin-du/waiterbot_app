@@ -8,10 +8,13 @@ import 'package:waiterbot_app/models/food_model.dart';
 import 'package:waiterbot_app/services/app_urls.dart';
 import 'package:waiterbot_app/services/shared_preferences.dart';
 
+import 'auth_provider.dart';
+
 enum Status { Fetching, FetchComplete, FetchFailed } // ! check sign in enum for more customization
 
 class FetchShopItems with ChangeNotifier {
   Status _fetchStatus = Status.Fetching;
+
   // static String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjAxMTc0ZThkNjljODEyOWVjMzM1MjEwIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTYxNDk1NzM0OCwiZXhwIjoxNjE1NTYyMTQ4fQ.H4LNBTY10wkJSF0JCI-66fuFSz37qHvYzHCZpeenkcM";
 
   Status get fetchStatus => _fetchStatus;
@@ -21,7 +24,8 @@ class FetchShopItems with ChangeNotifier {
 
     Map<String, dynamic> result;
     String token;
-    await UserPreferences().getUser().then((user) => token = user.token);
+    if(AuthProvider.guestLogin) token = 'garbage';
+    else await UserPreferences().getUser().then((user) => token = user.token);
 
     try{
       Response response = await get(
@@ -67,7 +71,8 @@ class FetchShopItems with ChangeNotifier {
 
     String token;
     // TODO: error handling for token cactch
-    await UserPreferences().getUser().then((user) => token = user.token);
+    if(AuthProvider.guestLogin) token = 'garbage';
+    else await UserPreferences().getUser().then((user) => token = user.token);
 
     try{
       Response response = await get(
@@ -114,7 +119,8 @@ class FetchShopItems with ChangeNotifier {
     Map<String, dynamic> result;
 
     String token;
-    await UserPreferences().getUser().then((user) => token = user.token);
+    if(AuthProvider.guestLogin) token = 'garbage';
+    else await UserPreferences().getUser().then((user) => token = user.token);
     
     AppUrls.setFoodId = foodId;
 
@@ -154,7 +160,8 @@ class FetchShopItems with ChangeNotifier {
     Map<String, dynamic> result;
 
     String token;
-    await UserPreferences().getUser().then((user) => token = user.token);
+    if(AuthProvider.guestLogin) token = 'garbage';
+    else await UserPreferences().getUser().then((user) => token = user.token);
 
     AppUrls.setFoodId = foodId;
 
@@ -199,7 +206,8 @@ class FetchShopItems with ChangeNotifier {
     Map<String, dynamic> result;
 
     String token;
-    await UserPreferences().getUser().then((user) => token = user.token);
+    if(AuthProvider.guestLogin) token = 'garbage';
+    else await UserPreferences().getUser().then((user) => token = user.token);
 
     List<Map<String, dynamic>> orderItems = items
     .map((value) => {"item": value.foodId, "portion": value.portionId, "qty": value.units}).toList();

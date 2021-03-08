@@ -37,6 +37,8 @@ class _ReviewsState extends State<Reviews> {
 
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+
     Widget addReview() {
       return Container(
         padding: EdgeInsets.all(5),
@@ -142,37 +144,38 @@ class _ReviewsState extends State<Reviews> {
                             Padding(
                               padding: EdgeInsets.all(5),
                               child: Text(
-                              reviews[index]['comment'],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'JosefinSlab',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: Colors.black,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.white,
-                                    blurRadius: 3,
-                                  ),
-                                ]
+                                reviews[index]['comment'],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'JosefinSlab',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.white,
+                                        blurRadius: 3,
+                                      ),
+                                    ]),
                               ),
                             ),
-                            ),
                             Padding(
-                              padding: EdgeInsets.only(top: 2.5, bottom: 5, right: 5),
+                              padding: EdgeInsets.only(
+                                  top: 2.5, bottom: 5, right: 5),
                               child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                ),
-                                Text(reviews[index]['stars'].toString()),
-                              ],
-                            ),
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                  ),
+                                  Text(reviews[index]['stars'].toString()),
+                                ],
+                              ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(top: 2.5, bottom: 5, right: 5),
+                              padding: EdgeInsets.only(
+                                  top: 2.5, bottom: 5, right: 5),
                               alignment: Alignment.centerRight,
                               child: Text(
                                 DateFormat('MMM d, yyyy h:mm a')
@@ -239,7 +242,12 @@ class _ReviewsState extends State<Reviews> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Ratings, Reviews & Ingredients'),
+          title: Text(
+            'Ratings, Reviews & Ingredients',
+            style: TextStyle(
+              fontSize: _height * 0.02712,
+            ),
+          ),
         ),
         body: SafeArea(
           child: Column(

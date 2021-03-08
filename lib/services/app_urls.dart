@@ -5,18 +5,18 @@ class AppUrls{
   // static String _tableId = "6046050da8996e00152ea87b";
   static String _tableId = "";
   
-  static const String websocketUrl = "http://waiterbot-api.us-east-1.elasticbeanstalk.com";
+  // static const String websocketUrl = "http://waiterbot-api.us-east-1.elasticbeanstalk.com";
   static const String remoteBaseUrl = 'http://waiterbot-api.us-east-1.elasticbeanstalk.com/'+'api';
 
-  // static const String websocketUrl = "https://waiterbot-api.herokuapp.com";
+  static const String websocketUrl = "https://waiterbot-api.herokuapp.com";
   static const String remoteBaseUrlHeroku = 'https://waiterbot-api.herokuapp.com/'+'api';
 
   // static const String websocketUrl = "http://10.0.2.2:3000";
   static const String localBaseUrl = 'http://10.0.2.2:3000/api';
 
   // static const String baseUrl = localBaseUrl;
-  static const String baseUrl = remoteBaseUrl;
-  // static const String baseUrl = remoteBaseUrlHeroku;
+  // static const String baseUrl = remoteBaseUrl;
+  static const String baseUrl = remoteBaseUrlHeroku;
 
   static const String login = baseUrl + '/auth/client_login';
   static const String register = baseUrl + '/auth/client_register';

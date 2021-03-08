@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/feedback_card.dart';
 import 'package:waiterbot_app/custom_widgets/food_card.dart';
 import 'package:waiterbot_app/models/food_model.dart';
+import 'package:waiterbot_app/providers/auth_provider.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
 
 class FeedBacks extends StatefulWidget {
@@ -29,7 +30,12 @@ class _FeedBacksState extends State<FeedBacks> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feedbacks'),
+        title: Text(
+          'Feedbacks',
+          style: TextStyle(
+            fontSize: _height * 0.02712,
+          ),
+        ),
       ),
       backgroundColor: Colors.lightGreenAccent,
       body: Column(
@@ -42,28 +48,31 @@ class _FeedBacksState extends State<FeedBacks> {
               animation: 'read',
             ),
           ),
-          Container(
-            alignment: Alignment.center,
-            height: _height * 32.5 / 100,
-            width: _width * 60 / 100,
-            child: CarouselSlider.builder(
-              unlimitedMode: true,
-              controller: _sliderController,
-              slideBuilder: (index) {
-                return FeedbackCard(foodItem: _foodItems[index]);
-              },
-              slideTransform: DefaultTransform(),
-              slideIndicator: CircularStaticIndicator(
-                indicatorRadius: _height * 0.008136, // 6
-                padding: EdgeInsets.only(bottom: _height * 2.15 / 100), // 20
-                enableAnimation: true,
-                currentIndicatorColor: Colors.white,
-                // indicatorBackgroundColor: Colors.grey,
-              ),
-              itemCount: _foodItems.length,
-              initialPage: 0,
-            ),
-          ),
+          AuthProvider.guestLogin
+              ? Text('Plase Login to Add Reviews')
+              : Container(
+                  alignment: Alignment.center,
+                  height: _height * 32.5 / 100,
+                  width: _width * 60 / 100,
+                  child: CarouselSlider.builder(
+                    unlimitedMode: true,
+                    controller: _sliderController,
+                    slideBuilder: (index) {
+                      return FeedbackCard(foodItem: _foodItems[index]);
+                    },
+                    slideTransform: DefaultTransform(),
+                    slideIndicator: CircularStaticIndicator(
+                      indicatorRadius: _height * 0.008136, // 6
+                      padding:
+                          EdgeInsets.only(bottom: _height * 2.15 / 100), // 20
+                      enableAnimation: true,
+                      currentIndicatorColor: Colors.white,
+                      // indicatorBackgroundColor: Colors.grey,
+                    ),
+                    itemCount: _foodItems.length,
+                    initialPage: 0,
+                  ),
+                ),
         ],
       ),
     );

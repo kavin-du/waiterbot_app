@@ -15,25 +15,33 @@ class OrderStatus extends StatefulWidget {
   _OrderStatusState createState() => _OrderStatusState();
 }
 
-class _OrderStatusState extends State<OrderStatus> { 
+class _OrderStatusState extends State<OrderStatus> {
   final Map<String, FlareActor> _animations = {
-    'Pending': FlareActor("animations/Liquid_Loader.flr", animation: "Untitled"), 
-    'Preparing': FlareActor("animations/Sushi.flr", animation: "Sushi Bounce"),  
-    'Delivering': FlareActor("animations/Robot.flr", animation: "reposo"),  
-    'Delivered': FlareActor("animations/success_check.flr", animation: "Untitled"),  
-    'Cancelled':FlareActor("animations/cancel_button.flr", animation: "Error"),  
-  }; 
+    'Pending':
+        FlareActor("animations/Liquid_Loader.flr", animation: "Untitled"),
+    'Preparing': FlareActor("animations/Sushi.flr", animation: "Sushi Bounce"),
+    'Delivering': FlareActor("animations/Robot.flr", animation: "reposo"),
+    'Delivered':
+        FlareActor("animations/success_check.flr", animation: "Untitled"),
+    'Cancelled': FlareActor("animations/cancel_button.flr", animation: "Error"),
+  };
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
-    NotificationProvider _notificationProvider = Provider.of<NotificationProvider>(context);
+    NotificationProvider _notificationProvider =
+        Provider.of<NotificationProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Order has been Placed.'),
+        title: Text(
+          'Your Order has been Placed',
+          style: TextStyle(
+            fontSize: _height * 0.02712,
+          ),
+        ),
       ),
       backgroundColor: Colors.amber[300],
       body: Container(
-        height: _height, // WTF? 
+        height: _height, // WTF?
         child: Column(
           children: [
             Container(
@@ -45,20 +53,28 @@ class _OrderStatusState extends State<OrderStatus> {
                 children: [
                   CircularProgressIndicator(),
                   SizedBox(width: 10),
-                  Text(_notificationProvider.orderStatus.length == 0 ? 'Please Wait..' : _notificationProvider.orderStatus[_notificationProvider.orderStatus.length - 1].toString(),),
+                  Text(
+                    _notificationProvider.orderStatus.length == 0
+                        ? 'Please Wait..'
+                        : _notificationProvider.orderStatus[
+                                _notificationProvider.orderStatus.length - 1]
+                            .toString(),
+                  ),
                 ],
               ),
             ),
             Container(
-              height: _height*0.5,
+              height: _height * 0.5,
               child: _notificationProvider.orderStatus.length == 0
-               ? _animations['Pending']
-               : _animations[_notificationProvider.orderStatus[_notificationProvider.orderStatus.length - 1]],
+                  ? _animations['Pending']
+                  : _animations[_notificationProvider.orderStatus[
+                      _notificationProvider.orderStatus.length - 1]],
             ),
             FlatButton(
               child: Text('Give Feedback'),
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => FeedBacks()));
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FeedBacks()));
               },
               color: Colors.blue,
               shape: RoundedRectangleBorder(
@@ -81,5 +97,3 @@ class _OrderStatusState extends State<OrderStatus> {
     );
   }
 }
-
-
