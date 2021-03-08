@@ -4,9 +4,10 @@ import 'package:waiterbot_app/screens/reviews.dart';
 
 class RatingStars extends StatelessWidget {
   // final int value;
+  final bool addReviews;
   final FoodItem foodItem;
 
-  const RatingStars({Key key, this.foodItem}) : super(key: key);
+  const RatingStars({Key key, this.foodItem, this.addReviews}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class RatingStars extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.pink[50],
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Reviews(foodItem: foodItem)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Reviews(foodItem: foodItem, addReviews: this.addReviews,)));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

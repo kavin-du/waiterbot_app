@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/providers/notification_provider.dart';
+import 'package:waiterbot_app/screens/feedbacks.dart';
 
 class OrderStatus extends StatefulWidget {
   final String token; // ! token is not used anywhere
@@ -52,22 +55,26 @@ class _OrderStatusState extends State<OrderStatus> {
                ? _animations['Pending']
                : _animations[_notificationProvider.orderStatus[_notificationProvider.orderStatus.length - 1]],
             ),
-            // Container(
-            //   height: 400,
-            //   child: ListView.builder(
-            //     itemCount: _notificationProvider.orderStatus.length,
-            //     itemBuilder: (context, index){
-            //       return Container(
-            //         height: 60,
-            //         padding: const EdgeInsets.all(6.0),
-            //         child: ListTile(
-            //           title: Text(_notificationProvider.orderStatus[index].toString()),
-            //           tileColor: Colors.purpleAccent,
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
+            FlatButton(
+              child: Text('Give Feedback'),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FeedBacks()));
+              },
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            FlatButton(
+              child: Text('Exit'),
+              onPressed: () {
+                exit(0);
+              },
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
           ],
         ),
       ),

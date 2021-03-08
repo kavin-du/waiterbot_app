@@ -28,6 +28,10 @@ class FoodItem extends Equatable{
     _portions = item.portions;
     _units = units;
     _selectedPortion = selectedPortion;
+    _image = item.image;
+    _stars = item.stars;
+    _reviewCount = item.reviewCount;
+    _ingredients = item.ingredients;
   }
 
   FoodItem.fromJson(Map<String, dynamic> parsedJson){

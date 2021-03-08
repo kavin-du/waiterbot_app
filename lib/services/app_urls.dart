@@ -2,7 +2,7 @@ class AppUrls{
   static String _shopId = "";
   // static String _shopId = "6011648d4821223750da1ee9";
   static String _foodId = "";
-  // static String _tableId = "60142f05a4d38f09efe4fd96";
+  // static String _tableId = "6046050da8996e00152ea87b";
   static String _tableId = "";
   
   static const String websocketUrl = "http://waiterbot-api.us-east-1.elasticbeanstalk.com";

@@ -64,8 +64,8 @@ class FetchShopItems with ChangeNotifier {
   Future<Map<String, dynamic>> fetchFoods() async {
     _fetchStatus = Status.Fetching;
     var result;
-    String token;
 
+    String token;
     // TODO: error handling for token cactch
     await UserPreferences().getUser().then((user) => token = user.token);
 
@@ -114,7 +114,6 @@ class FetchShopItems with ChangeNotifier {
     Map<String, dynamic> result;
 
     String token;
-    
     await UserPreferences().getUser().then((user) => token = user.token);
     
     AppUrls.setFoodId = foodId;
@@ -153,8 +152,8 @@ class FetchShopItems with ChangeNotifier {
   Future<Map<String, dynamic>> addReview(String foodId, String review, int stars) async {
     _fetchStatus = Status.Fetching;
     Map<String, dynamic> result;
-    String token;
 
+    String token;
     await UserPreferences().getUser().then((user) => token = user.token);
 
     AppUrls.setFoodId = foodId;
@@ -198,8 +197,8 @@ class FetchShopItems with ChangeNotifier {
 
   Future<Map<String, dynamic>> placeOrder(List<FoodItem> items, double total) async {
     Map<String, dynamic> result;
-    String token;
 
+    String token;
     await UserPreferences().getUser().then((user) => token = user.token);
 
     List<Map<String, dynamic>> orderItems = items

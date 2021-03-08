@@ -58,7 +58,7 @@ class _FoodCardState extends State<FoodCard> {
                         color: Colors.white,
                     ),
                   ),
-                  RatingStars(foodItem: widget.foodItem),
+                  RatingStars(foodItem: widget.foodItem, addReviews: false),
                   SizedBox(height: _height * 0.00678), // 5
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -19,10 +19,6 @@ class PushNotifications{
 
     flutterLocalNotificationsPlugin.initialize(initSetttings);
 
-
-
-
-
     // flutterLocalNotificationsPlugin.initialize(initSetttings,
     //     onSelectNotification: onSelectNotification);
   }

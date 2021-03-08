@@ -9,8 +9,9 @@ import 'package:waiterbot_app/services/constants.dart';
 
 class Reviews extends StatefulWidget {
   final FoodItem foodItem;
+  final bool addReviews;
 
-  const Reviews({Key key, this.foodItem}) : super(key: key);
+  const Reviews({Key key, this.foodItem, this.addReviews}) : super(key: key);
 
   @override
   _ReviewsState createState() => _ReviewsState();
@@ -244,7 +245,7 @@ class _ReviewsState extends State<Reviews> {
           child: Column(
             children: [
               ingredients(),
-              addReview(),
+              widget.addReviews ? addReview() : SizedBox(height: 20),
               showReviews(),
             ],
           ),
