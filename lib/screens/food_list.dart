@@ -139,7 +139,7 @@ class _FoodListState extends State<FoodList> {
                 'images/food_categories/rice.png',
                 'images/food_categories/noodles.png',
                 'images/food_categories/soup.jpg',
-                'images/food_categories/soup.jpg',
+                'images/food_categories/drinks.png',
               ];
               return Container(
                 padding: EdgeInsets.only(left: _height * 0.678/100, right: _height * 0.678/100), // 5

@@ -8,8 +8,8 @@ class Notifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _notificationProvider =
-        Provider.of<NotificationProvider>(context, listen: false);
+    final _height = MediaQuery.of(context).size.height;
+    final _notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     return Scaffold(
         appBar: AppBar(
           title: Text('Notifications'),
@@ -17,13 +17,16 @@ class Notifications extends StatelessWidget {
         body: ListView.builder(
           itemCount: _notificationProvider.notifications.length,
           itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+            return Container(
+              height: _height * 0.0678,
+              margin: EdgeInsets.fromLTRB(_height * 0.01356, _height * 0.00678, _height * 0.01356, _height * 0.00678),
               child: Card(
-                color: Colors.white70,
+                color: Colors.greenAccent,
+                elevation: 8,
                 child: Text(
                   _notificationProvider.notifications[index],
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: _height * 0.02712),
+                  textAlign: TextAlign.center,
                 ),
               ),
             );

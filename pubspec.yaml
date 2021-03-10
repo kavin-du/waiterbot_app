@@ -92,6 +92,7 @@ flutter:
     - images/food_categories/soup.jpg
     - images/food_categories/noodles.png
     - images/food_categories/rice.png
+    - images/food_categories/drinks.png
     - animations/success_check.flr
     - animations/Loading_error_and_check.flr
     - animations/juice063.riv
