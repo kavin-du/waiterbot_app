@@ -321,9 +321,13 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
       return loggedInStatus == Status.Authenticating ||
               registeredStatus == Status.Authenticating
           ? loading
-          : RaisedButton(
-              elevation: 10,
-              padding: EdgeInsets.fromLTRB(35, 10, 35, 10),
+          : TextButton(
+            style: TextButton.styleFrom(
+                elevation: 10,
+                padding: EdgeInsets.fromLTRB(35, 10, 35, 10), 
+                backgroundColor: Colors.amberAccent,
+                primary: Colors.black,
+              ),
               child: Text(
                 Provider.of<SignStateProvider>(context, listen: false).isSignUp
                     ? 'SIGN UP'
@@ -338,7 +342,6 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
                   doLogin();
                 }
               },
-              color: Colors.amberAccent,
             );
     }
 
@@ -376,7 +379,14 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
           Padding(padding: EdgeInsets.only(bottom: 85)),
           button(),
           Container(height: 20),
-          FlatButton(
+          TextButton(            
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: EdgeInsets.only(left: 20, right: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
             onPressed: () {
               AuthProvider.setGuest = true;
               NotificationProvider _notificationProvider =
@@ -385,10 +395,6 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
               Navigator.pushReplacementNamed(context, '/enterShopId');
             },
             child: Text('Guest', style: TextStyle(color: Colors.white)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
-            ),
-            color: Colors.blue,
           ),
         ],
       );

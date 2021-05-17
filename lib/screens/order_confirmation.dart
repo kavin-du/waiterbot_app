@@ -97,17 +97,24 @@ class OrderConfirmation extends StatelessWidget {
           // height: height*4/6,
           child: Column(
             children: [
-              FinalOrderCard(),
-              Container(
-                margin: EdgeInsets.only(bottom: 15),
-                child: Text(
-                  'Net Total: LKR ' + _finalOrdersProvider.getTotal.toString(),
+              FinalOrderCard(),              
+              Text(
+                  'Net Total:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+              ),
+              Text(
+                  'Rs. ' + _finalOrdersProvider.getTotal.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 30,
+                    color: Colors.white,
                   ),
-                ),
               ),
+              SizedBox(height: 7),
               _finalOrdersProvider.getTotal > 0
                   ? FlatButton(
                       padding: EdgeInsets.all(10),
