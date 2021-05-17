@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.waiterbot_app"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -9,6 +10,7 @@
 
         tools:replace="android:icon"  befor  ***********
         android:icon="@mipmap/launcher_icon"     *********
+        android:icon="@mipmap/icon"   17/5/2021  *********
 
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
@@ -16,7 +18,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="waiterbot_app"
         android:usesCleartextTraffic="true"
-        tools:replace="android:icon"
+        tools:replace="icon, label" 
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

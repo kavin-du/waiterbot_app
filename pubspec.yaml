@@ -45,6 +45,7 @@ dependencies:
   loading_animations: "^2.1.0"
   flutter_carousel_slider: ^1.0.6  
   intl: 
+  payhere_mobilesdk_flutter: ^1.0.2
 
 
 dev_dependencies:
