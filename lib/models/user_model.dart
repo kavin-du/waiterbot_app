@@ -6,15 +6,16 @@ class User {
   String mobileNumber;
   String token; // ?
 
-  User({this.id, this.firstName, this.lastName, this.email, this.mobileNumber, this.token});
+  User(this.id, this.firstName, this.lastName, this.email, this.mobileNumber, this.token);
 
   User.fromJson(Map<String, dynamic> parsedJson){
-    id = parsedJson['id'];
-    firstName = parsedJson['firstName'];
-    lastName = parsedJson['lastName'];
-    email = parsedJson['email']; // ?
-    mobileNumber = parsedJson['mobileNumber'];
-    token = parsedJson['token']; // ?
+    id = parsedJson['id'] ?? 'null id';
+    firstName = parsedJson['first_name'] ?? 'null firstname';
+    lastName = parsedJson['last_name'] ?? 'null lastname';
+    email = parsedJson['email'] ?? 'nullvalue@null.com'; // ?
+    mobileNumber = parsedJson['mobile'] ?? '0999999999';
+    token = parsedJson['token'] ?? 'nulltoken'; // ?
   }
+
 
 }

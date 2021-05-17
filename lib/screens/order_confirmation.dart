@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:payhere_mobilesdk_flutter/payhere_mobilesdk_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:waiterbot_app/custom_widgets/final_order_card.dart';
+import 'package:waiterbot_app/models/user_model.dart';
 import 'package:waiterbot_app/providers/auth_provider.dart';
 import 'package:waiterbot_app/providers/fetch_shop_items.dart';
 import 'package:waiterbot_app/providers/final_orders_provider.dart';
@@ -39,7 +40,7 @@ class OrderConfirmation extends StatelessWidget {
     );
   }
 
-  void startOneTimePayment(BuildContext context, String amount, String token) async {
+  void startOneTimePayment(BuildContext context, String amount, User user) async {
     Map paymentObject = {
       "sandbox": true,
       "merchant_id": "1217300",
@@ -49,10 +50,10 @@ class OrderConfirmation extends StatelessWidget {
       "items": "Hello from Flutter!",
       "amount": amount,
       "currency": "LKR",
-      "first_name": "Saman",
-      "last_name": "Perera",
-      "email": "samanp@gmail.com",
-      "phone": "0771234567",
+      "first_name": user.firstName,
+      "last_name": user.lastName,
+      "email": user.email,
+      "phone": user.mobileNumber,
       "address": "No.1, Galle Road",
       "city": "Colombo",
       "country": "Sri Lanka",
@@ -62,12 +63,11 @@ class OrderConfirmation extends StatelessWidget {
       "custom_1": "",
       "custom_2": ""
     };
-
     PayHere.startPayment(paymentObject, (paymentId) {
       print("One Time Payment Success. Payment Id: $paymentId");
       // showAlert(context, "Payment Success!", "Payment Id: $paymentId");
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => OrderStatus(token: token)));
+          MaterialPageRoute(builder: (context) => OrderStatus(token: user.token)));
     }, (error) {
       print("One Time Payment Failed. Error: $error");
       showAlert(context, "Payment Failed", "$error");
@@ -130,14 +130,14 @@ class OrderConfirmation extends StatelessWidget {
                             .whenComplete(() async {
                           if (result['success']) {
                             String token;
-                            if (AuthProvider.guestLogin)
+                            User user;
+                            if (AuthProvider.guestLogin){
                               token = 'garbage';
-                            else
-                              await UserPreferences()
+                              user = User("xxxxx", "guest","guest", "guest@guest.com","0712345678",token);
+                            } else await UserPreferences()
                                   .getUser()
-                                  .then((user) => token = user.token);
-                            // String token = FetchShopItems.token;
-                            startOneTimePayment(context, _finalOrdersProvider.getTotal.toString(), token);
+                                  .then((u) => user = u);
+                            startOneTimePayment(context, _finalOrdersProvider.getTotal.toString(), user);
                           } else {
                             Flushbar(
                               duration: Duration(seconds: 5),

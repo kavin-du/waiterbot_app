@@ -30,14 +30,7 @@ class UserPreferences {
     String mobileNumber = prefs.getString('mobileNumber');
     String token = prefs.getString('token');
 
-    return User(
-      id: id,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      mobileNumber: mobileNumber,
-      token: token,
-    );
+    return User(id,firstName,lastName,email,mobileNumber,token);
  
   }
 
