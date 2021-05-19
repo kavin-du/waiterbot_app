@@ -14,29 +14,6 @@ class QRScan extends StatefulWidget {
 
 class _QRScanState extends State<QRScan> {
   String cameraScanResult = '';
-
-  // String testWord = 'Hello machan'; // delete this
-  // final key = encr.Key.fromUtf8('my 32 length key................'); // generate this from server and get it
-  // final iv = encr.IV.fromLength(16);
-
-  // var _encrypter;
-  // var _encrypted;
-
-  // @override
-  // void initState() {    
-  //   super.initState();
-
-  //   _encrypter = encr.Encrypter(encr.AES(key));
-  //   _encrypted = _encrypter.encrypt(testWord, iv: iv);
-
-
-  //   print('encryp.......='+ _encrypted.base64.toString()); // delete
-
-  //   final decrypted = _encrypter.decrypt(encr.Encrypted.fromBase64(_encrypted.base64.toString()), iv: iv); // delete
-
-  //   print('decryp.............'+decrypted); // delete
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,10 +28,13 @@ class _QRScanState extends State<QRScan> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: RaisedButton(
-                color: Colors.blue,
-                textColor: Colors.white,
-                splashColor: Colors.blueGrey,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  primary: Colors.white,
+                  elevation: 5,
+                  padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                ),
                 onPressed: scan,
                 child: Text('START SCAN'),  
               )

@@ -44,7 +44,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
 
         successfulMessage.then((response) {
           if (response['success']) {
-            Navigator.pushReplacementNamed(context, '/enterShopId');
+            Navigator.pushReplacementNamed(context, '/qrScan');
           } else {
             Flushbar(
               title: 'Login Failed',
@@ -392,7 +392,7 @@ class _SignScreenState extends State<SignScreen> with ValidatorMixin {
               NotificationProvider _notificationProvider =
                   Provider.of<NotificationProvider>(context, listen: false);
               _notificationProvider.connectToSocket('garbage');
-              Navigator.pushReplacementNamed(context, '/enterShopId');
+              Navigator.pushReplacementNamed(context, '/qrScan');
             },
             child: Text('Guest', style: TextStyle(color: Colors.white)),
           ),

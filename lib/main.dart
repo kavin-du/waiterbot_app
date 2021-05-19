@@ -49,7 +49,7 @@ void main() {
       // home: FoodList(),
 
       routes: {
-        '/enterShopId': (context) => EnterShopId(),
+        // '/enterShopId': (context) => EnterShopId(),
         '/imageSlides': (context) => ImageSlides(),
         '/signScreen': (context) => SignScreen(),
         '/foodList': (context) => FoodList(),

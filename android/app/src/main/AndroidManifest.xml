@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="waiterbot_app"
+        android:label="WaiterBot App"
         android:usesCleartextTraffic="true"
         tools:replace="icon, label" 
         android:icon="@mipmap/launcher_icon">
