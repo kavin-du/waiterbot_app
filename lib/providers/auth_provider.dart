@@ -60,8 +60,8 @@ class AuthProvider with ChangeNotifier {
 
         _loggedInStatus = Status.LoggedIn;
         notifyListeners();
-        notificationProvider.connectToSocket(userData['token']); // ! add exception to this
-        print(userData['token'].toString());
+        notificationProvider.connectToSocket(responseData['token']); // ! add exception to this
+        // print(responseData['token'].toString()); // ! duck this
         result = {'success': true, 'message': 'Successful'};
         
       } else {

@@ -40,7 +40,7 @@ class OrderConfirmation extends StatelessWidget {
     );
   }
 
-  void startOneTimePayment(BuildContext context, String amount, User user) async {
+  void startOneTimePayment(BuildContext context, User user, FinalOrdersProvider finalOrdersProvider, FetchShopItems fetchShopItems) async {
     Map paymentObject = {
       "sandbox": true,
       "merchant_id": "1217300",
@@ -48,7 +48,7 @@ class OrderConfirmation extends StatelessWidget {
       "notify_url": "https://ent13zfovoz7d.x.pipedream.net/",
       "order_id": "ItemNo12345",
       "items": "Hello from Flutter!",
-      "amount": amount,
+      "amount": finalOrdersProvider.getTotal.toString(),
       "currency": "LKR",
       "first_name": user.firstName,
       "last_name": user.lastName,
@@ -63,11 +63,31 @@ class OrderConfirmation extends StatelessWidget {
       "custom_1": "",
       "custom_2": ""
     };
-    PayHere.startPayment(paymentObject, (paymentId) {
+    PayHere.startPayment(paymentObject, (paymentId) async {
       print("One Time Payment Success. Payment Id: $paymentId");
       // showAlert(context, "Payment Success!", "Payment Id: $paymentId");
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => OrderStatus(token: user.token)));
+      
+      Map<String, dynamic> result;
+      await fetchShopItems
+          .placeOrder(
+              finalOrdersProvider.getOrders.values.toList(),
+              finalOrdersProvider.getTotal)
+          .then((value) =>
+              result = Map<String, dynamic>.from(value))
+          .whenComplete(() async {
+          if (result['success']) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => OrderStatus(token: user.token)));                              
+          } else {
+            Flushbar(
+              duration: Duration(seconds: 5),
+              title: "Hi",
+              message:
+                  Map<String, dynamic>.from(result)['message'],
+            ).show(context);
+          }
+        },
+      );
+
     }, (error) {
       print("One Time Payment Failed. Error: $error");
       showAlert(context, "Payment Failed", "$error");
@@ -126,34 +146,12 @@ class OrderConfirmation extends StatelessWidget {
                         style: TextStyle(fontSize: 25, color: Colors.white),
                       ),
                       onPressed: () async {
-                        // print(_finalOrdersProvider.getOrders.values.toList()[0].selectedPortion);
-                        Map<String, dynamic> result;
-                        await _fetchShopItems
-                            .placeOrder(
-                                _finalOrdersProvider.getOrders.values.toList(),
-                                _finalOrdersProvider.getTotal)
-                            .then((value) =>
-                                result = Map<String, dynamic>.from(value))
-                            .whenComplete(() async {
-                          if (result['success']) {
-                            String token;
-                            User user;
-                            if (AuthProvider.guestLogin){
-                              token = 'garbage';
-                              user = User("xxxxx", "guest","guest", "guest@guest.com","0712345678",token);
-                            } else await UserPreferences()
-                                  .getUser()
-                                  .then((u) => user = u);
-                            startOneTimePayment(context, _finalOrdersProvider.getTotal.toString(), user);
-                          } else {
-                            Flushbar(
-                              duration: Duration(seconds: 5),
-                              title: "Hi",
-                              message:
-                                  Map<String, dynamic>.from(result)['message'],
-                            ).show(context);
-                          }
-                        });
+                        User user;
+                        if (AuthProvider.guestLogin){
+                          user = User("xxxxx", "guest","guest", "guest@guest.com","0712345678","garbage token");
+                        } else await UserPreferences().getUser().then((u) => user = u);
+                        
+                        startOneTimePayment(context, user, _finalOrdersProvider, _fetchShopItems);
                       },
                     )
                   : Container()

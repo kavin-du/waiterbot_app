@@ -52,7 +52,7 @@ class NotificationProvider with ChangeNotifier {
   final pushNotifications = PushNotifications();
   int _notifiCount = 0;
   IO.Socket _socket;
-  List<String> _notifications = List<String>();
+  List<String> _notifications = [];
   List<String> _orderStatus = [];
 
   int get notifyCount => _notifiCount;
@@ -91,10 +91,7 @@ class NotificationProvider with ChangeNotifier {
     });
 
     _socket.on("orderStateChange", (data) {
-      // Map<String, dynamic> temp = Map<String, dynamic>.from(jsonDecode(data));
-      // print(temp);
       _notifiCount++;
-      // _notifications.add("Your order is \n"+data.toString());
       _notifications.add("Your order is "+data['status'].toString());
       _orderStatus.add(data['status'].toString());
       pushNotifications.showNotification("Your order is "+data['status'].toString());
